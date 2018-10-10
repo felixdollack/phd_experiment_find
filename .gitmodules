@@ -1,0 +1,3 @@
+[submodule "src/ofx_blinky"]
+	path = src/ofx_blinky
+	url = https://github.com/felixdollack/ofx_blinky.git
