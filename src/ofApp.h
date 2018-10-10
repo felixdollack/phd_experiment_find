@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxXmlSettings.h"
 
 class ofApp : public ofBaseApp{
 
@@ -14,4 +15,9 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void gotMessage(ofMessage msg);
 		
+private:
+    ofxXmlSettings *_settings;
+    const string _settings_filename;
+    void loadSettingsAndWriteDefaultIfNeeded();
+    void writeDefaultSettings();
 };
