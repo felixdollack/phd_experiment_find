@@ -57,8 +57,13 @@ void ofApp::writeDefaultSettings() {
         this->_settings->addTag("positions");
         this->_settings->pushTag("positions");
         {
-            this->_settings->addValue("phi", 0);
-            this->_settings->addValue("r", 0.5f);
+            this->_settings->addTag("position");
+            this->_settings->pushTag("position");
+            {
+                this->_settings->addValue("phi", 0);
+                this->_settings->addValue("r", 0.5f);
+            }
+            this->_settings->popTag();
         }
         this->_settings->popTag();
     }
