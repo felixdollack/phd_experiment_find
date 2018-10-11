@@ -1,5 +1,9 @@
 #include "ofApp.h"
 
+void ofApp::exit(){
+    this->_eog_trigger->stopRecording();
+}
+
 //--------------------------------------------------------------
 void ofApp::setup(){
     this->_min_distance = 0.5f;
