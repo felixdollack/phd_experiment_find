@@ -40,6 +40,7 @@ private:
     float _source_height, _source_radius, _min_distance, _max_distance;
     vector<ofVec2f> _source_positions;
     vector<Blinky> _source_instance;
+    int _current_target;
 
     // shimmer eog
     UdpTrigger *_eog_trigger;

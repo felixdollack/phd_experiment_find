@@ -24,13 +24,25 @@ void ofApp::setup(){
         ofVec2f cartesian = convertPolarToCartesian(pos);
         this->_source_instance[i].setPosition(cartesian);
     }
+    this->_current_target = 0;
 
     this->_eog_trigger = new UdpTrigger();
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-
+    for (int i=0; i < this->_source_positions.size(); i++) {
+        if (i == this->_current_target) {
+            if (!this->_source_instance[i].isBlinking()) {
+                this->_source_instance[i].setBlinking(true);
+            }
+        } else {
+            this->_source_instance[i].setBlinking(false);
+        }
+    }
+    for (int i=0; i < this->_source_positions.size(); i++) {
+        _source_instance[i].update();
+    }
 }
 
 //--------------------------------------------------------------
