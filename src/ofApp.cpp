@@ -2,6 +2,13 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+    ofSetCircleResolution(100);
+    this->_ui_world_diameter = ofGetWindowHeight();
+    this->_ui_center = ofVec2f(ofGetWindowWidth(), ofGetWindowHeight()) - this->_ui_world_diameter/2;
+    this->_ui_world_start = this->_ui_center  - this->_ui_world_diameter/2;
+    this->_ui_min_distance = (this->_ui_world_diameter/2)*0.30;
+    this->_ui_max_distance = (this->_ui_world_diameter/2)*0.90;
+
     loadSettingsAndWriteDefaultIfNeeded();
 }
 
@@ -12,7 +19,18 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+    ofClear(0);
 
+    ofSetColor(ofColor::white);
+    ofDrawRectangle(this->_ui_world_start.x, this->_ui_world_start.y, this->_ui_world_diameter, this->_ui_world_diameter);
+    ofSetColor(ofColor::red);
+    ofDrawCircle(this->_ui_center.x, this->_ui_center.y, this->_ui_max_distance + this->_line_width);
+    ofSetColor(ofColor::white);
+    ofDrawCircle(this->_ui_center.x, this->_ui_center.y, this->_ui_max_distance);
+    ofSetColor(ofColor::blue);
+    ofDrawCircle(this->_ui_center.x, this->_ui_center.y, this->_ui_min_distance + this->_line_width);
+    ofSetColor(ofColor::white);
+    ofDrawCircle(this->_ui_center.x, this->_ui_center.y, this->_ui_min_distance);
 }
 
 //--------------------------------------------------------------

@@ -21,6 +21,12 @@ private:
     void loadSettingsAndWriteDefaultIfNeeded();
     void writeDefaultSettings();
 
+    // ui settings
+    float _line_width = 6.0f;
+    float _ui_world_diameter;
+    ofVec2f _ui_center, _ui_world_start;
+    float _ui_min_distance, _ui_max_distance;
+
     // sound source specific settings
     float _source_height, _source_radius;
     vector<ofVec2f> _source_positions;
