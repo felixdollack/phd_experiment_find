@@ -22,6 +22,6 @@ private:
     void writeDefaultSettings();
 
     // sound source specific settings
-    float _source_height;
+    float _source_height, _source_radius;
     vector<ofVec2f> _source_positions;
 };
