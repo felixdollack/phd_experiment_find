@@ -17,7 +17,7 @@ class ofApp : public ofBaseApp{
 		
 private:
     ofxXmlSettings *_settings;
-    const string _settings_filename;
+    const string _settings_filename = "settings.xml";
     void loadSettingsAndWriteDefaultIfNeeded();
     void writeDefaultSettings();
 };

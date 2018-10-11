@@ -64,4 +64,5 @@ void ofApp::writeDefaultSettings() {
         this->_settings->popTag();
     }
     this->_settings->popTag();
+    this->_settings->saveFile();
 }
