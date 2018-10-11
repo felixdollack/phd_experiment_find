@@ -6,6 +6,12 @@ void ofApp::exit(){
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+    this->_uiPanel.setup();
+    this->_uiPanel.add(this->_push_button_next.setup("next"));
+    this->_uiPanel.add(this->_push_button_previous.setup("previous"));
+    this->_push_button_next.addListener(this, &ofApp::moveToNextTarget);
+    this->_push_button_previous.addListener(this, &ofApp::moveToPreviousTarget);
+
     this->_min_distance = 0.5f;
     this->_max_distance = 2.5f;
 
@@ -68,6 +74,8 @@ void ofApp::draw(){
         }
     }
     ofPopMatrix();
+
+    this->_uiPanel.draw();
 }
 
 //--------------------------------------------------------------
@@ -88,6 +96,22 @@ void ofApp::windowResized(int w, int h){
 //--------------------------------------------------------------
 void ofApp::gotMessage(ofMessage msg){
 
+}
+
+void ofApp::moveToNextTarget() {
+    if ((this->_current_target+1) < this->_source_instance.size()) {
+        this->_current_target++;
+    } else {
+        this->_current_target = 0;
+    }
+}
+
+void ofApp::moveToPreviousTarget() {
+    if ((this->_current_target-1) >= 0) {
+        this->_current_target--;
+    } else {
+        this->_current_target = this->_source_instance.size()-1;
+    }
 }
 
 ofVec2f ofApp::mapDistanceToPixel(ofVec2f pos) {

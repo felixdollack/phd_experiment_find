@@ -4,6 +4,7 @@
 #include "ofx_blinky.h"
 #include "ofx_udp_trigger.h"
 #include "ofxXmlSettings.h"
+#include "ofxGui.h"
 
 class ofApp : public ofBaseApp{
 
@@ -35,6 +36,8 @@ private:
         float phi = polar.y;
         return ofVec2f(r * cos(phi/180*PI), r * sin(phi/180*PI));
     }
+    ofxPanel _uiPanel;
+    ofxButton _push_button_next, _push_button_previous;
 
     // sound source specific settings
     float _source_height, _source_radius, _min_distance, _max_distance;
@@ -44,4 +47,8 @@ private:
 
     // shimmer eog
     UdpTrigger *_eog_trigger;
+
+    // experimental control
+    void moveToNextTarget();
+    void moveToPreviousTarget();
 };
