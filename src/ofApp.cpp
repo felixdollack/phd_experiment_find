@@ -41,6 +41,29 @@ void ofApp::loadSettingsAndWriteDefaultIfNeeded() {
         writeDefaultSettings();
         this->_settings->loadFile(this->_settings_filename);
     }
+    this->_settings->pushTag("settings");
+    {
+        this->_settings->pushTag("subject");
+        {
+            this->_source_height = this->_settings->getValue("ear_height", 175.0f);
+        }
+        this->_settings->popTag();
+        int number_of_positions = this->_settings->getValue("number_of_positions", 0);
+        this->_settings->pushTag("positions");
+        {
+            for (int i=0; i < number_of_positions; i++) {
+                this->_settings->pushTag("position", i);
+                {
+                    float phi = this->_settings->getValue("phi", 0);  // 0 - 359.9 degrees
+                    float r   = this->_settings->getValue("r", 0.0f); // 0.5 - 3.5 meters
+                    _source_positions.push_back(ofVec2f(phi, r));
+                }
+                this->_settings->popTag();
+            }
+        }
+        this->_settings->popTag();
+    }
+    this->_settings->popTag();
 }
 
 void ofApp::writeDefaultSettings() {

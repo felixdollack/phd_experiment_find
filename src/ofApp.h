@@ -20,4 +20,8 @@ private:
     const string _settings_filename = "settings.xml";
     void loadSettingsAndWriteDefaultIfNeeded();
     void writeDefaultSettings();
+
+    // sound source specific settings
+    float _source_height;
+    vector<ofVec2f> _source_positions;
 };
