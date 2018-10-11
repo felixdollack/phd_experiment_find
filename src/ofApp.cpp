@@ -2,6 +2,9 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+    this->_min_distance = 0.5f;
+    this->_max_distance = 2.5f;
+
     ofSetCircleResolution(100);
     this->_ui_world_diameter = ofGetWindowHeight();
     this->_ui_center = ofVec2f(ofGetWindowWidth(), ofGetWindowHeight()) - this->_ui_world_diameter/2;

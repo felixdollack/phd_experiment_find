@@ -29,6 +29,6 @@ private:
     ofVec2f mapDistanceToPixel(ofVec2f pos);
 
     // sound source specific settings
-    float _source_height, _source_radius;
+    float _source_height, _source_radius, _min_distance, _max_distance;
     vector<ofVec2f> _source_positions;
 };
