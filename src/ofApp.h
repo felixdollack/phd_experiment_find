@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofx_blinky.h"
 #include "ofxXmlSettings.h"
 
 class ofApp : public ofBaseApp{
@@ -36,4 +37,5 @@ private:
     // sound source specific settings
     float _source_height, _source_radius, _min_distance, _max_distance;
     vector<ofVec2f> _source_positions;
+    vector<Blinky> _source_instance;
 };

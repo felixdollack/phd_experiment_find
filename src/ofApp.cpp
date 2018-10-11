@@ -13,6 +13,13 @@ void ofApp::setup(){
     this->_ui_max_distance = (this->_ui_world_diameter/2)*0.90;
 
     loadSettingsAndWriteDefaultIfNeeded();
+
+    for (int i=0; i < this->_source_positions.size(); i++) {
+        this->_source_instance.push_back(*new Blinky(this->_source_radius));
+        ofVec2f pos = mapDistanceToPixel(this->_source_positions[i]);
+        ofVec2f cartesian = convertPolarToCartesian(pos);
+        this->_source_instance[i].setPosition(cartesian);
+    }
 }
 
 //--------------------------------------------------------------
@@ -37,6 +44,10 @@ void ofApp::draw(){
         ofDrawCircle(0, 0, this->_ui_min_distance + this->_line_width);
         ofSetColor(ofColor::white);
         ofDrawCircle(0, 0, this->_ui_min_distance);
+
+        for (int i=0; i < this->_source_positions.size(); i++) {
+            _source_instance[i].draw();
+        }
     }
     ofPopMatrix();
 }
