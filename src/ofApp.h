@@ -27,6 +27,11 @@ private:
     ofVec2f _ui_center, _ui_world_start;
     float _ui_min_distance, _ui_max_distance;
     ofVec2f mapDistanceToPixel(ofVec2f pos);
+    static ofVec2f convertPolarToCartesian(ofVec2f polar) {
+        float r   = polar.x;
+        float phi = polar.y;
+        return ofVec2f(r * cos(phi/180*PI), r * sin(phi/180*PI));
+    }
 
     // sound source specific settings
     float _source_height, _source_radius, _min_distance, _max_distance;
