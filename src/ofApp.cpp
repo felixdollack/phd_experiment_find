@@ -50,7 +50,6 @@ void ofApp::writeDefaultSettings() {
         this->_settings->addTag("subject");
         this->_settings->pushTag("subject");
         {
-            this->_settings->addValue("name", "xxxxxx");
             this->_settings->addValue("ear_height", 175.0f);
         }
         this->_settings->popTag();
