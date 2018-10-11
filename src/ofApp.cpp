@@ -20,6 +20,8 @@ void ofApp::setup(){
         ofVec2f cartesian = convertPolarToCartesian(pos);
         this->_source_instance[i].setPosition(cartesian);
     }
+
+    this->_eog_trigger = new UdpTrigger();
 }
 
 //--------------------------------------------------------------
