@@ -53,6 +53,14 @@ void ofApp::gotMessage(ofMessage msg){
 
 }
 
+ofVec2f ofApp::mapDistanceToPixel(ofVec2f pos) {
+    pos.x -= this->_min_distance;
+    pos.x /= (this->_max_distance - this->_min_distance);
+    pos.x *= (this->_ui_max_distance - this->_ui_min_distance);
+    pos.x += this->_ui_min_distance;
+    return pos;
+}
+
 void ofApp::loadSettingsAndWriteDefaultIfNeeded() {
     this->_settings = new ofxXmlSettings();
     if (this->_settings->loadFile(this->_settings_filename) == false) {
