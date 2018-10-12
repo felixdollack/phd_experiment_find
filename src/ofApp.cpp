@@ -161,6 +161,15 @@ void ofApp::loadSettingsAndWriteDefaultIfNeeded() {
             }
         }
         this->_settings->popTag();
+        this->_settings->pushTag("network");
+        {
+            this->_settings->pushTag("android");
+            {
+                this->_android_port = this->_settings->getValue("port", -1);
+            }
+            this->_settings->popTag();
+        }
+        this->_settings->popTag();
     }
     this->_settings->popTag();
 }
@@ -186,6 +195,17 @@ void ofApp::writeDefaultSettings() {
             {
                 this->_settings->addValue("phi", 0);
                 this->_settings->addValue("r", 0.5f);
+            }
+            this->_settings->popTag();
+        }
+        this->_settings->popTag();
+        this->_settings->addTag("network");
+        this->_settings->pushTag("network");
+        {
+            this->_settings->addTag("android");
+            this->_settings->pushTag("android");
+            {
+                this->_settings->addValue("port", 12345);
             }
             this->_settings->popTag();
         }
