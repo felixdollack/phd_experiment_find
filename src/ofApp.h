@@ -37,6 +37,7 @@ private:
         return ofVec2f(r * cos(phi/180*PI), r * sin(phi/180*PI));
     }
     ofxPanel _uiPanel;
+    ofxToggle _toggle_button_sound;
     ofxButton _push_button_next, _push_button_previous;
 
     // sound source specific settings
@@ -52,6 +53,7 @@ private:
     // experimental control
     void moveToNextTarget();
     void moveToPreviousTarget();
+    void toggleSound(const void *sender, bool &value);
 
     // network
     string _my_ip = "";

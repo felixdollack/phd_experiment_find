@@ -15,6 +15,8 @@ void ofApp::setup(){
     this->_my_ip = getIPhost();
 
     this->_uiPanel.setup();
+    this->_uiPanel.add(this->_toggle_button_sound.setup("sound", false));
+    this->_toggle_button_sound.addListener(this, &ofApp::toggleSound);
     this->_uiPanel.add(this->_push_button_next.setup("next"));
     this->_uiPanel.add(this->_push_button_previous.setup("previous"));
     this->_push_button_next.addListener(this, &ofApp::moveToNextTarget);
@@ -135,6 +137,16 @@ void ofApp::moveToPreviousTarget() {
         this->_current_target--;
     } else {
         this->_current_target = this->_source_instance.size()-1;
+    }
+}
+
+void ofApp::toggleSound(const void *sender, bool &value) {
+    if (value == true) {
+        this->_toggle_button_sound.setFillColor(ofColor::green);
+        this->_eog_trigger->startRecording();
+    } else {
+        this->_toggle_button_sound.setFillColor(ofColor::red);
+        this->_eog_trigger->sendTrigger("");
     }
 }
 
