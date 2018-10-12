@@ -47,6 +47,7 @@ private:
 
     // shimmer eog
     UdpTrigger *_eog_trigger;
+    string _eog_host;
 
     // experimental control
     void moveToNextTarget();

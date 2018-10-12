@@ -40,7 +40,7 @@ void ofApp::setup(){
     }
     this->_current_target = 0;
 
-    this->_eog_trigger = new UdpTrigger();
+    this->_eog_trigger = new UdpTrigger(this->_eog_host);
 
     if (this->_android_tcp_server == NULL) {
         this->_android_tcp_server = new ofxTCPServer();
@@ -182,6 +182,11 @@ void ofApp::loadSettingsAndWriteDefaultIfNeeded() {
                 this->_android_port = this->_settings->getValue("port", -1);
             }
             this->_settings->popTag();
+            this->_settings->pushTag("eog");
+            {
+                this->_eog_host = this->_settings->getValue("host", "");
+            }
+            this->_settings->popTag();
         }
         this->_settings->popTag();
     }
@@ -220,6 +225,12 @@ void ofApp::writeDefaultSettings() {
             this->_settings->pushTag("android");
             {
                 this->_settings->addValue("port", 12345);
+            }
+            this->_settings->popTag();
+            this->_settings->addTag("eog");
+            this->_settings->pushTag("eog");
+            {
+                this->_settings->addValue("host", "192.168.1.1");
             }
             this->_settings->popTag();
         }
