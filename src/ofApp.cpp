@@ -75,6 +75,10 @@ void ofApp::draw(){
     }
     ofPopMatrix();
 
+    ofSetColor(ofColor::white);
+    ofDrawBitmapString("Target: " + ofToString(this->_current_target+1) + "/" + ofToString(this->_source_positions.size()), 10, ofGetWindowHeight()-25);
+    ofDrawBitmapString("r[m]: " + ofToString(this->_source_positions[this->_current_target].x) + " phi[deg]: " + ofToString(this->_source_positions[this->_current_target].y), 10, ofGetWindowHeight()-10);
+
     this->_uiPanel.draw();
 }
 
