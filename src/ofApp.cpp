@@ -2,6 +2,12 @@
 
 void ofApp::exit(){
     this->_eog_trigger->stopRecording();
+    if (this->_android_tcp_server->isConnected()) {
+        for (int clientID = 0; clientID < this->_android_tcp_server->getLastID(); clientID++) {
+            //sendMessage(clientID, "END/");
+            this->_android_tcp_server->disconnectClient(clientID);
+        }
+    }
 }
 
 //--------------------------------------------------------------
@@ -35,6 +41,14 @@ void ofApp::setup(){
     this->_current_target = 0;
 
     this->_eog_trigger = new UdpTrigger();
+
+    if (this->_android_tcp_server == NULL) {
+        this->_android_tcp_server = new ofxTCPServer();
+        this->_android_tcp_server->setMessageDelimiter("");
+    }
+    if (this->_android_tcp_server->getNumClients() <= 0) {
+        bool success = this->_android_tcp_server->setup(this->_android_port);
+    }
 }
 
 //--------------------------------------------------------------

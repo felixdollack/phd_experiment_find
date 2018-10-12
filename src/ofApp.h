@@ -56,5 +56,6 @@ private:
     string _my_ip = "";
     string getIPhost();
     vector<string> getLocalIPs();
+    ofxTCPServer* _android_tcp_server;
     int _android_port;
 };
