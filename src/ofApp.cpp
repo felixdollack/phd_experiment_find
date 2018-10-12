@@ -6,6 +6,8 @@ void ofApp::exit(){
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+    this->_my_ip = getIPhost();
+
     this->_uiPanel.setup();
     this->_uiPanel.add(this->_push_button_next.setup("next"));
     this->_uiPanel.add(this->_push_button_previous.setup("previous"));
@@ -37,6 +39,9 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
+    if (this->_my_ip == "") {
+        this->_my_ip = getIPhost();
+    }
     for (int i=0; i < this->_source_positions.size(); i++) {
         if (i == this->_current_target) {
             if (!this->_source_instance[i].isBlinking()) {
@@ -76,6 +81,7 @@ void ofApp::draw(){
     ofPopMatrix();
 
     ofSetColor(ofColor::white);
+    ofDrawBitmapString("IP: " + this->_my_ip, 10, ofGetWindowHeight()-40);
     ofDrawBitmapString("Target: " + ofToString(this->_current_target+1) + "/" + ofToString(this->_source_positions.size()), 10, ofGetWindowHeight()-25);
     ofDrawBitmapString("r[m]: " + ofToString(this->_source_positions[this->_current_target].x) + " phi[deg]: " + ofToString(this->_source_positions[this->_current_target].y), 10, ofGetWindowHeight()-10);
 
@@ -187,4 +193,45 @@ void ofApp::writeDefaultSettings() {
     }
     this->_settings->popTag();
     this->_settings->saveFile();
+}
+
+vector<string> ofApp::getLocalIPs() {
+    vector<string> result;
+#ifdef TARGET_WIN32
+    string commandResult = ofSystem("ipconfig");
+    for (int pos = 0; pos >= 0; ) {
+        pos = commandResult.find("IPv4", pos);
+        if (pos >= 0) {
+            pos = commandResult.find(":", pos) + 2;
+            int pos2 = commandResult.find("\n", pos);
+            string ip = commandResult.substr(pos, pos2 - pos);
+            pos = pos2;
+            if (ip.substr(0, 3) != "127") { // let's skip loopback addresses
+                result.push_back(ip);
+            }
+        }
+    }
+#else
+    string commandResult = ofSystem("ifconfig");
+    for (int pos = 0; pos >= 0; ) {
+        pos = commandResult.find("inet ", pos);
+        if (pos >= 0) {
+            int pos2 = commandResult.find("netmask", pos);
+            string ip = commandResult.substr(pos + 5, pos2 - pos - 6);
+            pos = pos2;
+            if (ip.substr(0, 3) != "127") { // let's skip loopback addresses
+                result.push_back(ip);
+            }
+        }
+    }
+#endif
+    return result;
+}
+string ofApp::getIPhost() {
+    string ad = string();
+    vector<string> list = getLocalIPs();
+    if (!list.empty()) {
+        ad = list[0];
+    }
+    return ad;
 }

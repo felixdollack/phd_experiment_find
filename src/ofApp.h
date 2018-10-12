@@ -51,4 +51,9 @@ private:
     // experimental control
     void moveToNextTarget();
     void moveToPreviousTarget();
+
+    // network
+    string _my_ip = "";
+    string getIPhost();
+    vector<string> getLocalIPs();
 };
