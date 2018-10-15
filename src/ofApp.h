@@ -62,6 +62,7 @@ private:
     vector<string> getLocalIPs();
     ofxTCPServer* _android_tcp_server;
     int _android_port;
+    string _client_ip;
     void connectPhone();
     void disconnectPhone();
     void sendMessageToPhone(int client, string message);

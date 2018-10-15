@@ -11,6 +11,7 @@ void ofApp::exit(){
 //--------------------------------------------------------------
 void ofApp::setup(){
     this->_my_ip = getIPhost();
+    this->_client_ip = "000.000.000.000";
 
     this->_uiPanel.setup();
     this->_uiPanel.add(this->_toggle_button_sound.setup("sound", false));
@@ -56,6 +57,11 @@ void ofApp::update(){
     if (this->_my_ip == "") {
         this->_my_ip = getIPhost();
     }
+    if (this->_client_ip == "000.000.000.000") {
+        if (this->_android_tcp_server->getNumClients() > 0) {
+            this->_client_ip = this->_android_tcp_server->getClientIP(0);
+        }
+    }
     for (int i=0; i < this->_source_positions.size(); i++) {
         if (i == this->_current_target) {
             if (!this->_source_instance[i].isBlinking()) {
@@ -94,10 +100,12 @@ void ofApp::draw(){
     }
     ofPopMatrix();
 
-    ofSetColor(ofColor::white);
-    ofDrawBitmapString("IP: " + this->_my_ip, 10, ofGetWindowHeight()-40);
-    ofDrawBitmapString("Target: " + ofToString(this->_current_target+1) + "/" + ofToString(this->_source_positions.size()), 10, ofGetWindowHeight()-25);
-    ofDrawBitmapString("r[m]: " + ofToString(this->_source_positions[this->_current_target].x) + " phi[deg]: " + ofToString(this->_source_positions[this->_current_target].y), 10, ofGetWindowHeight()-10);
+    ofSetColor(ofColor::white); // 55, 40, 25, 10
+    ofDrawBitmapString("Target: " + ofToString(this->_current_target+1) + "/" + ofToString(this->_source_positions.size()), 10, ofGetWindowHeight()-70);
+    ofDrawBitmapString("r[m]: " + ofToString(this->_source_positions[this->_current_target].x) + " phi[deg]: " + ofToString(this->_source_positions[this->_current_target].y), 10, ofGetWindowHeight()-55);
+
+    ofDrawBitmapString("IP: " + this->_my_ip, 10, ofGetWindowHeight()-25);
+    ofDrawBitmapString("connected to: " + this->_client_ip, 10, ofGetWindowHeight()-10);
 
     this->_uiPanel.draw();
 }
