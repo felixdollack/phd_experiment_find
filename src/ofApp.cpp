@@ -2,11 +2,9 @@
 
 void ofApp::exit(){
     this->_eog_trigger->stopRecording();
+    disconnectPhone();
     if (this->_android_tcp_server->isConnected()) {
-        for (int clientID = 0; clientID < this->_android_tcp_server->getLastID(); clientID++) {
-            //sendMessage(clientID, "END/");
-            this->_android_tcp_server->disconnectClient(clientID);
-        }
+        this->_android_tcp_server->close();
     }
 }
 
@@ -23,6 +21,7 @@ void ofApp::setup(){
     this->_push_button_previous.addListener(this, &ofApp::moveToPreviousTarget);
     this->_uiPanel.add(this->_push_button_connect.setup("connect phone"));
     this->_uiPanel.add(this->_push_button_disconnect.setup("disconnect phone"));
+    this->_push_button_connect.addListener(this, &ofApp::connectPhone);
 
     this->_min_distance = 0.5f;
     this->_max_distance = 2.5f;
@@ -49,9 +48,6 @@ void ofApp::setup(){
     if (this->_android_tcp_server == NULL) {
         this->_android_tcp_server = new ofxTCPServer();
         this->_android_tcp_server->setMessageDelimiter("");
-    }
-    if (this->_android_tcp_server->getNumClients() <= 0) {
-        bool success = this->_android_tcp_server->setup(this->_android_port);
     }
 }
 
@@ -158,6 +154,27 @@ ofVec2f ofApp::mapDistanceToPixel(ofVec2f pos) {
     pos.x *= (this->_ui_max_distance - this->_ui_min_distance);
     pos.x += this->_ui_min_distance;
     return pos;
+}
+
+void ofApp::connectPhone() {
+    if (this->_android_tcp_server->getNumClients() <= 0) {
+        bool success = this->_android_tcp_server->setup(this->_android_port);
+        if (success == true) {
+            this->_push_button_connect.removeListener(this, &ofApp::connectPhone);
+            this->_push_button_disconnect.addListener(this, &ofApp::disconnectPhone);
+        }
+    }
+}
+
+void ofApp::disconnectPhone() {
+    if (this->_android_tcp_server->isConnected()) {
+        for (int clientID = 0; clientID < this->_android_tcp_server->getLastID(); clientID++) {
+            //sendMessage(clientID, "END/");
+            this->_android_tcp_server->disconnectClient(clientID);
+        }
+        this->_push_button_disconnect.removeListener(this, &ofApp::disconnectPhone);
+        this->_push_button_connect.addListener(this, &ofApp::connectPhone);
+    }
 }
 
 void ofApp::loadSettingsAndWriteDefaultIfNeeded() {
