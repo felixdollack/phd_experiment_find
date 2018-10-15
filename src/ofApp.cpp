@@ -156,6 +156,12 @@ ofVec2f ofApp::mapDistanceToPixel(ofVec2f pos) {
     return pos;
 }
 
+void ofApp::sendMessageToPhone(int client, string message) {
+    if (this->_android_tcp_server->isClientConnected(client) == true) {
+        this->_android_tcp_server->send(client, message);
+    }
+}
+
 void ofApp::connectPhone() {
     if (this->_android_tcp_server->getNumClients() <= 0) {
         bool success = this->_android_tcp_server->setup(this->_android_port);
@@ -169,7 +175,7 @@ void ofApp::connectPhone() {
 void ofApp::disconnectPhone() {
     if (this->_android_tcp_server->isConnected()) {
         for (int clientID = 0; clientID < this->_android_tcp_server->getLastID(); clientID++) {
-            //sendMessage(clientID, "END/");
+            sendMessageToPhone(clientID, "END/");
             this->_android_tcp_server->disconnectClient(clientID);
         }
         this->_push_button_disconnect.removeListener(this, &ofApp::disconnectPhone);

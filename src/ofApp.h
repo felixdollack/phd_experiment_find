@@ -64,4 +64,5 @@ private:
     int _android_port;
     void connectPhone();
     void disconnectPhone();
+    void sendMessageToPhone(int client, string message);
 };
