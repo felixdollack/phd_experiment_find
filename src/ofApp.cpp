@@ -23,9 +23,14 @@ void ofApp::setup(){
     this->_uiPanel.add(this->_push_button_connect.setup("connect phone"));
     this->_uiPanel.add(this->_push_button_disconnect.setup("disconnect phone"));
     this->_push_button_connect.addListener(this, &ofApp::connectPhone);
+    this->_uiPanel.add(this->_reset_head_origin.setup("reset origin"));
+    this->_reset_head_origin.addListener(this, &ofApp::resetHeadOrigin);
 
     this->_min_distance = 0.5f;
     this->_max_distance = 2.5f;
+
+    this->_x_origin = 0;
+    this->_y_origin = 0;
 
     ofSetCircleResolution(100);
     this->_ui_world_diameter = ofGetWindowHeight();
@@ -101,6 +106,7 @@ void ofApp::draw(){
     ofPopMatrix();
 
     ofSetColor(ofColor::white); // 55, 40, 25, 10
+    ofDrawBitmapString("origin (x/y): " + ofToString(this->_x_origin) + "/" + ofToString(this->_y_origin), 10, ofGetWindowHeight()-85);
     ofDrawBitmapString("Target: " + ofToString(this->_current_target+1) + "/" + ofToString(this->_source_positions.size()), 10, ofGetWindowHeight()-70);
     ofDrawBitmapString("r[m]: " + ofToString(this->_source_positions[this->_current_target].x) + " phi[deg]: " + ofToString(this->_source_positions[this->_current_target].y), 10, ofGetWindowHeight()-55);
 
@@ -154,6 +160,11 @@ void ofApp::toggleSound(const void *sender, bool &value) {
         this->_toggle_button_sound.setFillColor(ofColor::red);
         this->_eog_trigger->sendTrigger("");
     }
+}
+
+void ofApp::resetHeadOrigin() {
+    this->_x_origin = 1;
+    this->_y_origin = 1;
 }
 
 ofVec2f ofApp::mapDistanceToPixel(ofVec2f pos) {
