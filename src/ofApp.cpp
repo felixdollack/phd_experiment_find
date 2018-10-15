@@ -193,7 +193,7 @@ void ofApp::connectPhone() {
 
 void ofApp::disconnectPhone() {
     if (this->_android_tcp_server->isConnected()) {
-        for (int clientID = 0; clientID < this->_android_tcp_server->getLastID(); clientID++) {
+        for (int clientID = 0; clientID < this->_android_tcp_server->getNumClients(); clientID++) {
             sendMessageToPhone(clientID, "END/");
             this->_android_tcp_server->disconnectClient(clientID);
         }
