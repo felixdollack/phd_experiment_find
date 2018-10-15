@@ -21,6 +21,8 @@ void ofApp::setup(){
     this->_uiPanel.add(this->_push_button_previous.setup("previous"));
     this->_push_button_next.addListener(this, &ofApp::moveToNextTarget);
     this->_push_button_previous.addListener(this, &ofApp::moveToPreviousTarget);
+    this->_uiPanel.add(this->_push_button_connect.setup("connect phone"));
+    this->_uiPanel.add(this->_push_button_disconnect.setup("disconnect phone"));
 
     this->_min_distance = 0.5f;
     this->_max_distance = 2.5f;

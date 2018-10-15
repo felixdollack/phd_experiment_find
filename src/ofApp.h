@@ -39,6 +39,7 @@ private:
     ofxPanel _uiPanel;
     ofxToggle _toggle_button_sound;
     ofxButton _push_button_next, _push_button_previous;
+    ofxButton _push_button_connect, _push_button_disconnect;
 
     // sound source specific settings
     float _source_height, _source_radius, _min_distance, _max_distance;
