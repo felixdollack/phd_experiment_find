@@ -37,6 +37,7 @@ private:
         return ofVec2f(r * cos(phi/180*PI), r * sin(phi/180*PI));
     }
     ofxPanel _uiPanel;
+    ofxLabel _phone_label, _tracking_label, _presentation_label;
     ofxToggle _toggle_button_eog, _toggle_button_sound;
     ofxButton _push_button_next, _push_button_previous;
     ofxButton _push_button_connect, _push_button_disconnect;

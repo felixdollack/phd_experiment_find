@@ -13,20 +13,35 @@ void ofApp::setup(){
     this->_my_ip = getIPhost();
     this->_client_ip = "000.000.000.000";
 
+    // add gui
     this->_uiPanel.setup();
-    this->_uiPanel.add(this->_toggle_button_eog.setup("record", false));
+    this->_uiPanel.add(this->_phone_label.setup("PHONE",""));
+    this->_uiPanel.add(this->_push_button_connect.setup("connect to phone"));
+    this->_uiPanel.add(this->_push_button_disconnect.setup("disconnect from phone"));
+
+    this->_uiPanel.add(this->_tracking_label.setup("TRACKING",""));
+    this->_uiPanel.add(this->_reset_head_origin.setup("reset head origin"));
+    this->_uiPanel.add(this->_toggle_button_eog.setup("record eog", false));
+
+    this->_uiPanel.add(this->_presentation_label.setup("PRESENTATION",""));
+    this->_uiPanel.add(this->_toggle_button_sound.setup("sound on", false));
+    this->_uiPanel.add(this->_push_button_next.setup("next target"));
+    this->_uiPanel.add(this->_push_button_previous.setup("previous target"));
+
+    // set gui text and box colors
+    this->_push_button_connect.setTextColor(ofColor::red);
+    this->_push_button_disconnect.setFillColor(ofColor::black);
+    this->_push_button_disconnect.setTextColor(ofColor::black);
+    this->_toggle_button_eog.setTextColor(ofColor::red);
+    this->_toggle_button_sound.setTextColor(ofColor::red);
+
+    // add gui listeners
+    this->_push_button_connect.addListener(this, &ofApp::connectPhone);
+    this->_reset_head_origin.addListener(this, &ofApp::resetHeadOrigin);
     this->_toggle_button_eog.addListener(this, &ofApp::toggleRecording);
-    this->_uiPanel.add(this->_toggle_button_sound.setup("sound", false));
     this->_toggle_button_sound.addListener(this, &ofApp::toggleSound);
-    this->_uiPanel.add(this->_push_button_next.setup("next"));
-    this->_uiPanel.add(this->_push_button_previous.setup("previous"));
     this->_push_button_next.addListener(this, &ofApp::moveToNextTarget);
     this->_push_button_previous.addListener(this, &ofApp::moveToPreviousTarget);
-    this->_uiPanel.add(this->_push_button_connect.setup("connect phone"));
-    this->_uiPanel.add(this->_push_button_disconnect.setup("disconnect phone"));
-    this->_push_button_connect.addListener(this, &ofApp::connectPhone);
-    this->_uiPanel.add(this->_reset_head_origin.setup("reset origin"));
-    this->_reset_head_origin.addListener(this, &ofApp::resetHeadOrigin);
 
     this->_min_distance = 0.5f;
     this->_max_distance = 2.5f;
