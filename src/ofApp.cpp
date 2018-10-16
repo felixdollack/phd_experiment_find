@@ -157,10 +157,8 @@ void ofApp::moveToPreviousTarget() {
 
 void ofApp::toggleRecording(const void *sender, bool &value) {
     if (value == true) {
-        cout << "should start" << endl;
         this->_eog_trigger->startRecording();
     } else {
-        cout << "should stop" << endl;
         this->_eog_trigger->stopRecording();
     }
 }
