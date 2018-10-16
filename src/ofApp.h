@@ -53,7 +53,7 @@ private:
     string _eog_host;
 
     // experimental control
-    float _x_origin, _y_origin;
+    float _x_origin, _y_origin, _phi_origin;
     void resetHeadOrigin();
     void moveToNextTarget();
     void moveToPreviousTarget();

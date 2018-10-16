@@ -31,8 +31,10 @@ void ofApp::setup(){
     this->_min_distance = 0.5f;
     this->_max_distance = 2.5f;
 
+    // reset head origin
     this->_x_origin = 0;
     this->_y_origin = 0;
+    this->_phi_origin = 0;
 
     ofSetCircleResolution(100);
     this->_ui_world_diameter = ofGetWindowHeight();
