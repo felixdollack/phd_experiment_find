@@ -56,6 +56,7 @@ private:
     // motion capture
     int _mocap_receive_port, _mocap_send_port;
     string _mocap_ip;
+    bool _use_vicon;
 
     // experimental control
     float _x_origin, _y_origin, _phi_origin;

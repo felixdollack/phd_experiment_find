@@ -301,6 +301,7 @@ void ofApp::loadSettingsAndWriteDefaultIfNeeded() {
             this->_settings->popTag();
             this->_settings->pushTag("mocap");
             {
+                this->_use_vicon = this->_settings->getValue("use_vicon", false);
                 this->_mocap_ip = this->_settings->getValue("host", "");
                 this->_settings->pushTag("port");
                 {
@@ -359,6 +360,7 @@ void ofApp::writeDefaultSettings() {
             this->_settings->addTag("mocap"); // maybe the eog trigger can be broadcasted, then mocap has to listen on port 65500 as well
             this->_settings->pushTag("mocap");
             {
+                this->_settings->setValue("use_vicon", true);
                 this->_settings->addValue("host", "192.168.1.1");
                 this->_settings->addTag("port");
                 this->_settings->pushTag("port");
