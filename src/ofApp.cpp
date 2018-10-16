@@ -89,6 +89,9 @@ void ofApp::update(){
     if (this->_client_ip == "000.000.000.000") {
         if (this->_android_tcp_server->getNumClients() > 0) {
             this->_client_ip = this->_android_tcp_server->getClientIP(0);
+            this->_push_button_connect.setTextColor(ofColor::green);
+        } else {
+            this->_push_button_connect.setTextColor(ofColor::red);
         }
     }
     for (int i=0; i < this->_source_positions.size(); i++) {
@@ -233,6 +236,9 @@ void ofApp::connectPhone() {
         if (success == true) {
             this->_push_button_connect.removeListener(this, &ofApp::connectPhone);
             this->_push_button_disconnect.addListener(this, &ofApp::disconnectPhone);
+            this->_push_button_connect.setFillColor(ofColor::black);
+            this->_push_button_disconnect.setFillColor(ofColor::gray);
+            this->_push_button_disconnect.setTextColor(ofColor::white);
         }
     }
 }
@@ -245,6 +251,10 @@ void ofApp::disconnectPhone() {
         }
         this->_push_button_disconnect.removeListener(this, &ofApp::disconnectPhone);
         this->_push_button_connect.addListener(this, &ofApp::connectPhone);
+        this->_push_button_connect.setTextColor(ofColor::red);
+        this->_push_button_connect.setFillColor(ofColor::gray);
+        this->_push_button_disconnect.setFillColor(ofColor::black);
+        this->_push_button_disconnect.setTextColor(ofColor::black);
     }
 }
 
