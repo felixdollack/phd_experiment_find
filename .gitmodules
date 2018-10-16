@@ -4,3 +4,6 @@
 [submodule "src/ofx_udp_trigger"]
 	path = src/ofx_udp_trigger
 	url = https://github.com/felixdollack/ofx_udp_trigger.git
+[submodule "src/ofx_vicon_udp_receiver"]
+	path = src/ofx_vicon_udp_receiver
+	url = https://github.com/felixdollack/ofx_vicon_udp_receiver.git
