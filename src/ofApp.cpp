@@ -52,6 +52,7 @@ void ofApp::setup(){
     this->_current_target = 0;
 
     this->_eog_trigger = new UdpTrigger(this->_eog_host);
+    this->_eog_trigger->connectToHost();
 
     if (this->_android_tcp_server == NULL) {
         this->_android_tcp_server = new ofxTCPServer();
