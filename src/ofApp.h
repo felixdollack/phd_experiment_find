@@ -53,6 +53,10 @@ private:
     UdpTrigger *_eog_trigger;
     string _eog_host;
 
+    // motion capture
+    int _mocap_receive_port, _mocap_send_port;
+    string _mocap_ip;
+
     // experimental control
     float _x_origin, _y_origin, _phi_origin;
     void resetHeadOrigin();

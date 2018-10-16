@@ -299,6 +299,17 @@ void ofApp::loadSettingsAndWriteDefaultIfNeeded() {
                 this->_eog_host = this->_settings->getValue("host", "");
             }
             this->_settings->popTag();
+            this->_settings->pushTag("mocap");
+            {
+                this->_mocap_ip = this->_settings->getValue("host", "");
+                this->_settings->pushTag("port");
+                {
+                    this->_mocap_receive_port = this->_settings->getValue("in",  -1);
+                    this->_mocap_send_port = this->_settings->getValue("out", -1);
+                }
+                this->_settings->popTag();
+            }
+            this->_settings->popTag();
         }
         this->_settings->popTag();
     }
@@ -343,6 +354,19 @@ void ofApp::writeDefaultSettings() {
             this->_settings->pushTag("eog");
             {
                 this->_settings->addValue("host", "192.168.1.1");
+            }
+            this->_settings->popTag();
+            this->_settings->addTag("mocap"); // maybe the eog trigger can be broadcasted, then mocap has to listen on port 65500 as well
+            this->_settings->pushTag("mocap");
+            {
+                this->_settings->addValue("host", "192.168.1.1");
+                this->_settings->addTag("port");
+                this->_settings->pushTag("port");
+                {
+                    this->_settings->addValue("in",  18403);
+                    this->_settings->addValue("out", 18404);
+                }
+                this->_settings->popTag();
             }
             this->_settings->popTag();
         }
