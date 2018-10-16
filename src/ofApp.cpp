@@ -51,6 +51,7 @@ void ofApp::setup(){
     this->_y_origin = 0;
     this->_phi_origin = 0;
 
+    // draw live feedback background
     ofSetCircleResolution(100);
     this->_ui_world_diameter = ofGetWindowHeight();
     this->_ui_center = ofVec2f(ofGetWindowWidth(), ofGetWindowHeight()) - this->_ui_world_diameter/2;
@@ -60,6 +61,7 @@ void ofApp::setup(){
 
     loadSettingsAndWriteDefaultIfNeeded();
 
+    // create sound positions to be tested
     for (int i=0; i < this->_source_positions.size(); i++) {
         this->_source_instance.push_back(*new Blinky(this->_source_radius));
         ofVec2f pos = mapDistanceToPixel(this->_source_positions[i]);
@@ -68,9 +70,11 @@ void ofApp::setup(){
     }
     this->_current_target = 0;
 
+    // create and connect to shimmer udp port
     this->_eog_trigger = new UdpTrigger(this->_eog_host);
     this->_eog_trigger->connectToHost();
 
+    // create tcp server to connect to android
     if (this->_android_tcp_server == NULL) {
         this->_android_tcp_server = new ofxTCPServer();
         this->_android_tcp_server->setMessageDelimiter("");
