@@ -59,7 +59,7 @@ private:
     string _mocap_ip;
     bool _use_vicon;
     ViconReceiver _vicon_receiver;
-    HeadPositionAndRotation data;
+    HeadPositionAndRotation _head_data;
 
     // experimental control
     float _x_origin, _y_origin, _phi_origin;
