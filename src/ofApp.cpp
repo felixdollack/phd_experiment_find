@@ -157,19 +157,33 @@ void ofApp::moveToPreviousTarget() {
 
 void ofApp::toggleRecording(const void *sender, bool &value) {
     if (value == true) {
+        this->_toggle_button_eog.setTextColor(ofColor::green);
         this->_eog_trigger->startRecording();
     } else {
         this->_eog_trigger->stopRecording();
+        this->_toggle_button_eog.setTextColor(ofColor::red);
     }
 }
 
 void ofApp::toggleSound(const void *sender, bool &value) {
     if (value == true) {
-        this->_toggle_button_sound.setFillColor(ofColor::green);
+        this->_push_button_next.removeListener(this, &ofApp::moveToNextTarget);
+        this->_push_button_previous.removeListener(this, &ofApp::moveToPreviousTarget);
+        this->_push_button_next.setFillColor(ofColor::black);
+        this->_push_button_previous.setFillColor(ofColor::black);
+        this->_push_button_next.setTextColor(ofColor::black);
+        this->_push_button_previous.setTextColor(ofColor::black);
+        this->_toggle_button_sound.setTextColor(ofColor::green);
         this->_eog_trigger->sendTrigger("sound_on");
     } else {
-        this->_toggle_button_sound.setFillColor(ofColor::red);
         this->_eog_trigger->sendTrigger("sound_off");
+        this->_toggle_button_sound.setTextColor(ofColor::red);
+        this->_push_button_next.setTextColor(ofColor::white);
+        this->_push_button_previous.setTextColor(ofColor::white);
+        this->_push_button_next.setFillColor(ofColor::gray);
+        this->_push_button_previous.setFillColor(ofColor(128));
+        this->_push_button_next.addListener(this, &ofApp::moveToNextTarget);
+        this->_push_button_previous.addListener(this, &ofApp::moveToPreviousTarget);
     }
 }
 
