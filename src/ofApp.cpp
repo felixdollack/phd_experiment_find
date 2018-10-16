@@ -6,6 +6,7 @@ void ofApp::exit(){
     if (this->_android_tcp_server->isConnected()) {
         this->_android_tcp_server->close();
     }
+    this->_vicon_receiver.stop();
 }
 
 //--------------------------------------------------------------
@@ -79,6 +80,12 @@ void ofApp::setup(){
         this->_android_tcp_server = new ofxTCPServer();
         this->_android_tcp_server->setMessageDelimiter("");
     }
+
+    // setup vicon receiver
+    ofxUDPSettings settings;
+    settings.receiveOn(this->_mocap_receive_port);
+    settings.blocking = false;
+    this->_vicon_receiver.setup(settings);
 }
 
 //--------------------------------------------------------------
@@ -106,6 +113,8 @@ void ofApp::update(){
     for (int i=0; i < this->_source_positions.size(); i++) {
         _source_instance[i].update();
     }
+    this->_vicon_receiver.updateData();
+    this->_head_data = this->_vicon_receiver.getLatestData();
 }
 
 //--------------------------------------------------------------

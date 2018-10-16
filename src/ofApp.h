@@ -5,6 +5,7 @@
 #include "ofx_udp_trigger.h"
 #include "ofxXmlSettings.h"
 #include "ofxGui.h"
+#include "vicon_receiver.h"
 
 class ofApp : public ofBaseApp{
 
@@ -57,6 +58,8 @@ private:
     int _mocap_receive_port, _mocap_send_port;
     string _mocap_ip;
     bool _use_vicon;
+    ViconReceiver _vicon_receiver;
+    HeadPositionAndRotation data;
 
     // experimental control
     float _x_origin, _y_origin, _phi_origin;
