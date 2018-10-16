@@ -14,6 +14,8 @@ void ofApp::setup(){
     this->_client_ip = "000.000.000.000";
 
     this->_uiPanel.setup();
+    this->_uiPanel.add(this->_toggle_button_eog.setup("record", false));
+    this->_toggle_button_eog.addListener(this, &ofApp::toggleRecording);
     this->_uiPanel.add(this->_toggle_button_sound.setup("sound", false));
     this->_toggle_button_sound.addListener(this, &ofApp::toggleSound);
     this->_uiPanel.add(this->_push_button_next.setup("next"));
@@ -152,13 +154,23 @@ void ofApp::moveToPreviousTarget() {
     }
 }
 
+void ofApp::toggleRecording(const void *sender, bool &value) {
+    if (value == true) {
+        cout << "should start" << endl;
+        this->_eog_trigger->startRecording();
+    } else {
+        cout << "should stop" << endl;
+        this->_eog_trigger->stopRecording();
+    }
+}
+
 void ofApp::toggleSound(const void *sender, bool &value) {
     if (value == true) {
         this->_toggle_button_sound.setFillColor(ofColor::green);
-        this->_eog_trigger->startRecording();
+        this->_eog_trigger->sendTrigger("sound_on");
     } else {
         this->_toggle_button_sound.setFillColor(ofColor::red);
-        this->_eog_trigger->sendTrigger("");
+        this->_eog_trigger->sendTrigger("sound_off");
     }
 }
 

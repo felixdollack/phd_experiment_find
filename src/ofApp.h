@@ -37,7 +37,7 @@ private:
         return ofVec2f(r * cos(phi/180*PI), r * sin(phi/180*PI));
     }
     ofxPanel _uiPanel;
-    ofxToggle _toggle_button_sound;
+    ofxToggle _toggle_button_eog, _toggle_button_sound;
     ofxButton _push_button_next, _push_button_previous;
     ofxButton _push_button_connect, _push_button_disconnect;
     ofxButton _reset_head_origin;
@@ -57,6 +57,7 @@ private:
     void resetHeadOrigin();
     void moveToNextTarget();
     void moveToPreviousTarget();
+    void toggleRecording(const void *sender, bool &value);
     void toggleSound(const void *sender, bool &value);
 
     // network
