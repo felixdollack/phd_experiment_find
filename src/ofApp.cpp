@@ -242,7 +242,12 @@ ofVec2f ofApp::mapDistanceToPixel(ofVec2f pos) {
 
 void ofApp::sendMessageToPhone(int client, string message) {
     if (this->_android_tcp_server->isClientConnected(client) == true) {
-        this->_android_tcp_server->send(client, message);
+        char messageLength[4];
+        for (int i = 0; i < 4; i++) {
+            messageLength[3 - i] = (message.length() >> (i * 8));
+        }
+        this->_android_tcp_server->sendRawBytes(client, messageLength, 4);
+        this->_android_tcp_server->sendRawBytes(client, message.c_str(), message.length());
     }
 }
 
