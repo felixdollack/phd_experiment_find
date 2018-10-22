@@ -214,8 +214,10 @@ void ofApp::toggleSound(const void *sender, bool &value) {
         this->_push_button_next.setTextColor(ofColor::black);
         this->_push_button_previous.setTextColor(ofColor::black);
         this->_toggle_button_sound.setTextColor(ofColor::green);
+        sendMessageToPhone(0, "PLAY/");
         this->_eog_trigger->sendTrigger("sound_on");
     } else {
+        sendMessageToPhone(0, "STOP/");
         this->_eog_trigger->sendTrigger("sound_off");
         this->_toggle_button_sound.setTextColor(ofColor::red);
         this->_push_button_next.setTextColor(ofColor::white);
