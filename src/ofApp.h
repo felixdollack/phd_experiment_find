@@ -60,6 +60,7 @@ private:
     bool _use_vicon;
     ViconReceiver _vicon_receiver;
     HeadPositionAndRotation _head_data;
+    float _head_x, _head_y, _head_phi;
 
     // experimental control
     float _x_origin, _y_origin, _phi_origin;

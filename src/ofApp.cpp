@@ -51,6 +51,9 @@ void ofApp::setup(){
     this->_x_origin = 0;
     this->_y_origin = 0;
     this->_phi_origin = 0;
+    this->_head_x = 0;
+    this->_head_y = 0;
+    this->_head_phi = 0;
 
     // draw live feedback background
     ofSetCircleResolution(100);
@@ -115,6 +118,10 @@ void ofApp::update(){
     }
     this->_vicon_receiver.updateData();
     this->_head_data = this->_vicon_receiver.getLatestData();
+    // keep a copy important for android and substract origin (x,y,phi)
+    this->_head_x = this->_head_data.x_position - this->_x_origin;
+    this->_head_y = this->_head_data.y_position - this->_y_origin;
+    this->_head_phi = this->_head_data.z_rotation - this->_phi_origin;
 }
 
 //--------------------------------------------------------------
