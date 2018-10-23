@@ -233,6 +233,10 @@ void ofApp::toggleRecording(const void *sender, bool &value) {
 
 void ofApp::toggleSound(const void *sender, bool &value) {
     if (value == true) {
+        // sound source position
+        ofVec2f pos = convertPolarToCartesian(this->_source_positions[this->_current_target]);
+        sendMessageToPhone(0, "SRCPOS/" + ofToString(pos.x) + "/" + ofToString(pos.y));
+        // update ui
         this->_push_button_next.removeListener(this, &ofApp::moveToNextTarget);
         this->_push_button_previous.removeListener(this, &ofApp::moveToPreviousTarget);
         this->_push_button_next.setFillColor(ofColor::black);
@@ -240,6 +244,7 @@ void ofApp::toggleSound(const void *sender, bool &value) {
         this->_push_button_next.setTextColor(ofColor::black);
         this->_push_button_previous.setTextColor(ofColor::black);
         this->_toggle_button_sound.setTextColor(ofColor::green);
+        // send sound and eog-trigger message
         sendMessageToPhone(0, "PLAY/");
         this->_eog_trigger->sendTrigger("sound_on");
     } else {
