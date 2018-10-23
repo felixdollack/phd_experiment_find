@@ -160,9 +160,12 @@ void ofApp::draw(){
         // draw head
         ofPushMatrix();
         {
-            ofRotateDeg(this->_head_phi+180);
+            ofVec2f pos = ofVec2f(-this->_head_y, -this->_head_x); // flip and invert axis for show only axes
+            pos = mapPositionToPixel(pos);
             ofSetColor(ofColor::orange);
+            ofTranslate(pos);
             ofDrawCircle(0, 0, this->_ui_head_radius);
+            ofRotateDeg(180 - this->_head_phi);
             ofDrawCircle(0, this->_ui_head_radius, 3);
         }
         ofPopMatrix();
@@ -181,6 +184,10 @@ void ofApp::draw(){
 
     ofDrawBitmapString("IP: " + this->_my_ip, 10, ofGetWindowHeight()-25);
     ofDrawBitmapString("connected to: " + this->_client_ip, 10, ofGetWindowHeight()-10);
+
+    ofSetColor(ofColor::black);
+    ofDrawBitmapString("/- window -\\", this->_ui_center.x - 45, 15);
+    ofDrawBitmapString("door", ofGetWindowWidth() - 30, this->_ui_center.y);
 
     this->_uiPanel.draw();
 }
