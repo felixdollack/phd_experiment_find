@@ -354,7 +354,7 @@ void ofApp::loadSettingsAndWriteDefaultIfNeeded() {
         this->_settings->pushTag("subject");
         {
             this->_source_height = this->_settings->getValue("ear_height", 175.0f);
-            this->_settings->getValue("ui_radius", 2.0f);
+            this->_ui_head_radius = this->_settings->getValue("ui_radius", 2.0f);
         }
         this->_settings->popTag();
         this->_source_radius = this->_settings->getValue("ui_radius", 1.0f);

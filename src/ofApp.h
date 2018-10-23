@@ -28,7 +28,7 @@ private:
 
     // ui settings
     float _line_width = 6.0f;
-    float _ui_head_radius = 15.0f;
+    float _ui_head_radius;
     float _ui_world_diameter;
     ofVec2f _ui_center, _ui_world_start;
     float _ui_min_distance, _ui_max_distance;
