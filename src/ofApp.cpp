@@ -160,7 +160,7 @@ void ofApp::draw(){
     ofPopMatrix();
 
     ofSetColor(ofColor::white); // 55, 40, 25, 10
-    ofDrawBitmapString("origin (x/y): " + ofToString(this->_x_origin) + "/" + ofToString(this->_y_origin), 10, ofGetWindowHeight()-85);
+    ofDrawBitmapString("origin (x/y phi): " + ofToString(this->_x_origin) + "/" + ofToString(this->_y_origin) + " " + ofToString(this->_phi_origin), 10, ofGetWindowHeight()-85);
     ofDrawBitmapString("Target: " + ofToString(this->_current_target+1) + "/" + ofToString(this->_source_positions.size()), 10, ofGetWindowHeight()-70);
     ofDrawBitmapString("r[m]: " + ofToString(this->_source_positions[this->_current_target].x) + " phi[deg]: " + ofToString(this->_source_positions[this->_current_target].y), 10, ofGetWindowHeight()-55);
 
@@ -241,8 +241,9 @@ void ofApp::toggleSound(const void *sender, bool &value) {
 }
 
 void ofApp::resetHeadOrigin() {
-    this->_x_origin = 1;
-    this->_y_origin = 1;
+    this->_x_origin = this->_head_data.x_position;
+    this->_y_origin = this->_head_data.y_position;
+    this->_phi_origin = this->_head_data.z_rotation;
 }
 
 ofVec2f ofApp::mapDistanceToPixel(ofVec2f pos) {
