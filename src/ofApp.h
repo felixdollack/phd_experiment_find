@@ -62,6 +62,7 @@ private:
     ViconReceiver _vicon_receiver;
     HeadPositionAndRotation _head_data;
     float _head_x, _head_y, _head_z, _head_phi;
+    float _old_head_x, _old_head_y, _old_head_z, _old_head_phi;
 
     // experimental control
     float _x_origin, _y_origin, _z_origin, _phi_origin;
