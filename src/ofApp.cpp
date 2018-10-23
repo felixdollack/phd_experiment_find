@@ -174,7 +174,8 @@ void ofApp::draw(){
     ofPopMatrix();
 
     ofSetColor(ofColor::white); // 55, 40, 25, 10
-    ofDrawBitmapString("origin (x/y phi): " + ofToString(this->_x_origin) + "/" + ofToString(this->_y_origin) + " " + ofToString(this->_phi_origin), 10, ofGetWindowHeight()-85);
+    ofDrawBitmapString("origin (x/y): " + ofToString(this->_x_origin) + "/" + ofToString(this->_y_origin), 10, ofGetWindowHeight()-100);
+    ofDrawBitmapString("origin (phi): " + ofToString(this->_phi_origin), 10, ofGetWindowHeight()-85);
     ofDrawBitmapString("Target: " + ofToString(this->_current_target+1) + "/" + ofToString(this->_source_positions.size()), 10, ofGetWindowHeight()-70);
     ofDrawBitmapString("r[m]: " + ofToString(this->_source_positions[this->_current_target].x) + " phi[deg]: " + ofToString(this->_source_positions[this->_current_target].y), 10, ofGetWindowHeight()-55);
 
