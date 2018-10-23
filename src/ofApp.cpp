@@ -121,7 +121,8 @@ void ofApp::update(){
     // keep a copy important for android and substract origin (x,y,phi)
     this->_head_x = this->_head_data.x_position - this->_x_origin;
     this->_head_y = this->_head_data.y_position - this->_y_origin;
-    this->_head_phi = this->_head_data.z_rotation - this->_phi_origin;
+    this->_head_z = this->_head_data.z_position - this->_z_origin;
+    this->_head_phi = fmod(this->_head_data.z_rotation - this->_phi_origin, 360.0f);
 }
 
 //--------------------------------------------------------------
