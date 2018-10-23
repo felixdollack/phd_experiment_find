@@ -269,6 +269,40 @@ ofVec2f ofApp::mapDistanceToPixel(ofVec2f pos) {
     return pos;
 }
 
+ofVec2f ofApp::mapPositionToPixel(ofVec2f pos) {
+    float realWorld2PixelFactor = ((this->_ui_max_distance - this->_ui_min_distance) / (this->_max_distance - this->_min_distance));
+    float sign;
+    if (abs(pos.x)-this->_min_distance < 0) {
+        // points closer than the minimum distance
+        pos.x *= (this->_ui_min_distance/this->_min_distance);
+    } else {
+        // points between the minimum and the maximum distance
+        if (pos.x < 0) {
+            sign = -1.0f;
+        } else {
+            sign = 1.0f;
+        }
+        pos.x = pos.x + sign*this->_min_distance;
+        pos.x *= realWorld2PixelFactor;
+        pos.x = pos.x - sign*this->_min_distance;
+    }
+    if (abs(pos.y)-this->_min_distance < 0) {
+        // points closer than the minimum distance
+        pos.y *= (this->_ui_min_distance/this->_min_distance);
+    } else {
+        // points between the minimum and the maximum distance
+        if (pos.y < 0) {
+            sign = -1.0f;
+        } else {
+            sign = 1.0f;
+        }
+        pos.y = pos.y + sign*this->_min_distance;
+        pos.y *= realWorld2PixelFactor;
+        pos.y = pos.y - sign*this->_min_distance;
+    }
+    return pos;
+}
+
 void ofApp::sendMessageToPhone(int client, string message) {
     if (this->_android_tcp_server->isClientConnected(client) == true) {
         char messageLength[4];

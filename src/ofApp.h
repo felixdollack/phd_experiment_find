@@ -33,6 +33,7 @@ private:
     ofVec2f _ui_center, _ui_world_start;
     float _ui_min_distance, _ui_max_distance;
     ofVec2f mapDistanceToPixel(ofVec2f pos);
+    ofVec2f mapPositionToPixel(ofVec2f pos);
     static ofVec2f convertPolarToCartesian(ofVec2f polar) {
         float r   = polar.x;
         float phi = polar.y - 90; // shift so 0 is up on the screen
