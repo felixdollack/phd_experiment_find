@@ -143,6 +143,16 @@ void ofApp::draw(){
         ofSetColor(ofColor::white);
         ofDrawCircle(0, 0, this->_ui_min_distance);
 
+        // draw head
+        ofPushMatrix();
+        {
+            ofRotateDeg(this->_head_phi+180);
+            ofSetColor(ofColor::orange);
+            ofDrawCircle(0, 0, this->_ui_head_radius);
+            ofDrawCircle(0, this->_ui_head_radius, 3);
+        }
+        ofPopMatrix();
+
         for (int i=0; i < this->_source_positions.size(); i++) {
             _source_instance[i].draw();
         }
