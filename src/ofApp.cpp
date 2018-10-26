@@ -75,7 +75,7 @@ void ofApp::setup(){
     for (int i=0; i < this->_source_positions.size(); i++) {
         this->_source_instance.push_back(*new Blinky(this->_source_radius));
         ofVec2f pos = mapDistanceToPixel(this->_source_positions[i]);
-        ofVec2f cartesian = convertPolarToCartesian(pos);
+        ofVec2f cartesian = convertPolarToCartesian(pos, 90); // rotate sources by 90 cw to have 0 at the bottom
         this->_source_instance[i].setPosition(cartesian);
     }
     this->_current_target = 0;
