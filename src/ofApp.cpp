@@ -129,10 +129,21 @@ void ofApp::update(){
     this->_old_head_y = this->_head_y;
     this->_old_head_z = this->_head_z;
     this->_old_head_phi = this->_head_phi;
-    this->_head_x = (this->_head_data.x_position/1000) - this->_x_origin;
-    this->_head_y = (this->_head_data.y_position/1000) - this->_y_origin;
-    this->_head_z = (this->_head_data.z_position/1000) - this->_z_origin;
-    this->_head_phi = fmod(this->_head_data.z_rot_avg - this->_phi_origin, 360.0f);
+    if (0) {
+        // convert position from milimeters to meters
+        this->_head_x = (this->_head_data.x_position/1000) - this->_x_origin;
+        this->_head_y = (this->_head_data.y_position/1000) - this->_y_origin;
+        this->_head_z = (this->_head_data.z_position/1000) - this->_z_origin;
+        // invert rotation direction for screen and android
+        this->_head_phi = fmod((360.0f - this->_head_data.z_rot_avg) - this->_phi_origin, 360.0f);
+    } else {
+        // round to milimeter accuracy
+        this->_head_x = round(this->_head_data.x_position)/1000 - this->_x_origin;
+        this->_head_y = round(this->_head_data.y_position)/1000 - this->_y_origin;
+        this->_head_z = round(this->_head_data.z_position)/1000 - this->_z_origin;
+        // round to 0.1 degree and invert rotation direction for screen and android
+        this->_head_phi = fmod((360.0f - round(this->_head_data.z_rot_avg*10)/10) - this->_phi_origin, 360.0f);
+    }
 
     if ((this->_old_head_x != this->_head_x) || (this->_old_head_y != this->_head_y) || (this->_old_head_z != this->_head_z) || (this->_old_head_phi != this->_head_phi)) {
         sendMessageToPhone(0, "POSITION/" + ofToString(this->_head_x) + "/" + ofToString(this->_head_y) + "/" + ofToString(this->_head_z) + "/" + ofToString(this->_head_phi));
@@ -268,10 +279,19 @@ void ofApp::toggleSound(const void *sender, bool &value) {
 }
 
 void ofApp::resetHeadOrigin() {
-    this->_x_origin = this->_head_data.x_position/1000;
-    this->_y_origin = this->_head_data.y_position/1000;
-    this->_z_origin = this->_head_data.z_position/1000;
-    this->_phi_origin = this->_head_data.z_rot_avg;
+    if (0) {
+        this->_x_origin = this->_head_data.x_position/1000;
+        this->_y_origin = this->_head_data.y_position/1000;
+        this->_z_origin = this->_head_data.z_position/1000;
+        this->_phi_origin = 360.0f - this->_head_data.z_rot_avg;
+    } else {
+        // round to milimeter accuracy
+        this->_x_origin = round(this->_head_data.x_position)/1000;
+        this->_y_origin = round(this->_head_data.y_position)/1000;
+        this->_z_origin = round(this->_head_data.z_position)/1000;
+        // round to 0.1 degree
+        this->_phi_origin = 360.0f - round(this->_head_data.z_rot_avg*10)/10;
+    }
 }
 
 ofVec2f ofApp::mapDistanceToPixel(ofVec2f pos) {
