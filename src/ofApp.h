@@ -35,8 +35,11 @@ private:
     ofVec2f mapDistanceToPixel(ofVec2f pos);
     ofVec2f mapPositionToPixel(ofVec2f pos);
     static ofVec2f convertPolarToCartesian(ofVec2f polar) {
+        return convertPolarToCartesian(polar, 0);
+    }
+    static ofVec2f convertPolarToCartesian(ofVec2f polar, float piOffset) {
         float r   = polar.x;
-        float phi = polar.y - 90; // shift so 0 is up on the screen
+        float phi = polar.y + piOffset;
         return ofVec2f(r * cos(phi/180*PI), r * sin(phi/180*PI));
     }
     ofxPanel _uiPanel;
