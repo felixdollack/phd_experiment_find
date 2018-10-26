@@ -171,16 +171,19 @@ void ofApp::draw(){
         // draw head
         ofPushMatrix();
         {
-            ofVec2f pos = ofVec2f(-this->_head_y, -this->_head_x); // flip and invert axis for show only axes
+            ofVec2f pos = ofVec2f(this->_head_x, this->_head_y);
             pos = mapPositionToPixel(pos);
-            ofSetColor(ofColor::orange);
             ofTranslate(pos);
+            ofSetColor(ofColor::orange);
             ofDrawCircle(0, 0, this->_ui_head_radius);
-            ofRotateDeg(180 - this->_head_phi);
+            //ofRotateDeg(this->_head_phi, 0, 0, 1); // of_v0.10
+            ofRotateDeg(this->_head_phi); // of_v0.9
+            ofSetColor(ofColor::red);
             ofDrawCircle(0, this->_ui_head_radius, 3);
         }
         ofPopMatrix();
 
+        // draw source positions
         for (int i=0; i < this->_source_positions.size(); i++) {
             _source_instance[i].draw();
         }
@@ -200,8 +203,8 @@ void ofApp::draw(){
     ofDrawBitmapString("connected to: " + this->_client_ip, 10, ofGetWindowHeight()-10);
 
     ofSetColor(ofColor::black);
-    ofDrawBitmapString("/- window -\\", this->_ui_center.x - 45, 15);
-    ofDrawBitmapString("door", ofGetWindowWidth() - 30, this->_ui_center.y);
+    ofDrawBitmapString("\\- window -/", this->_ui_center.x - 45, 15);
+    ofDrawBitmapString("door", this->_ui_world_start.x, this->_ui_center.y);
 
     this->_uiPanel.draw();
 }
