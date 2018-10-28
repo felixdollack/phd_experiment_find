@@ -259,7 +259,8 @@ void ofApp::toggleSound(const void *sender, bool &value) {
     if (value == true) {
         // sound source position
         ofVec2f pos = convertPolarToCartesian(this->_source_positions[this->_current_target]);
-        sendMessageToPhone(0, "SRCPOS/" + ofToString(pos.x) + "/" + ofToString(pos.y));
+        cout << "src pos:" << ofToString(pos.x) + "/" + ofToString(pos.y) << endl;
+        sendMessageToPhone(0, "SRCPOS/" + ofToString(pos.x) + "/" + ofToString(pos.y) + "/" + ofToString(this->_source_height));
         // update ui
         this->_push_button_next.removeListener(this, &ofApp::moveToNextTarget);
         this->_push_button_previous.removeListener(this, &ofApp::moveToPreviousTarget);
@@ -391,7 +392,7 @@ void ofApp::loadSettingsAndWriteDefaultIfNeeded() {
     {
         this->_settings->pushTag("subject");
         {
-            this->_source_height = this->_settings->getValue("ear_height", 175.0f);
+            this->_source_height = this->_settings->getValue("ear_height", 1.60f);
             this->_ui_head_radius = this->_settings->getValue("ui_radius", 2.0f);
         }
         this->_settings->popTag();
