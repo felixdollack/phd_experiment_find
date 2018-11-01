@@ -6,6 +6,7 @@
 #include "ofxXmlSettings.h"
 #include "ofxGui.h"
 #include "vicon_receiver.h"
+#include <ctime>
 
 class ofApp : public ofBaseApp{
 
@@ -86,4 +87,8 @@ private:
     void connectPhone();
     void disconnectPhone();
     void sendMessageToPhone(int client, string message);
+
+    // data logging
+    string nowToString();
+    bool _isLogFileCreated;
 };
