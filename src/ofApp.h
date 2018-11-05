@@ -70,7 +70,7 @@ private:
     float _old_head_x, _old_head_y, _old_head_z, _old_head_phi;
 
     // experimental control
-    float _x_origin, _y_origin, _z_origin, _phi_origin;
+    float _x_origin, _y_origin, _phi_origin;
     void resetHeadOrigin();
     void moveToNextTarget();
     void moveToPreviousTarget();

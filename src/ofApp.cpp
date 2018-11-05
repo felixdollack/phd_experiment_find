@@ -53,7 +53,6 @@ void ofApp::setup(){
     // reset head origin
     this->_x_origin = 0;
     this->_y_origin = 0;
-    this->_z_origin = 0;
     this->_phi_origin = 0;
     this->_head_x = 0;
     this->_head_y = 0;
@@ -136,14 +135,14 @@ void ofApp::update(){
         // convert position from milimeters to meters
         this->_head_x = (this->_head_data.x_position/1000) - this->_x_origin;
         this->_head_y = (this->_head_data.y_position/1000) - this->_y_origin;
-        this->_head_z = (this->_head_data.z_position/1000) - this->_z_origin;
+        this->_head_z = (this->_head_data.z_position/1000);
         // invert rotation direction for screen and android
         this->_head_phi = fmod((360.0f - this->_head_data.z_rot_avg) - this->_phi_origin, 360.0f);
     } else {
         // round to milimeter accuracy
         this->_head_x = round(this->_head_data.x_position)/1000 - this->_x_origin;
         this->_head_y = round(this->_head_data.y_position)/1000 - this->_y_origin;
-        this->_head_z = round(this->_head_data.z_position)/1000 - this->_z_origin;
+        this->_head_z = round(this->_head_data.z_position)/1000;
         // round to 0.1 degree and invert rotation direction for screen and android
         this->_head_phi = fmod((360.0f - round(this->_head_data.z_rot_avg*10)/10) - this->_phi_origin, 360.0f);
     }
@@ -299,13 +298,11 @@ void ofApp::resetHeadOrigin() {
     if (0) {
         this->_x_origin = this->_head_data.x_position/1000;
         this->_y_origin = this->_head_data.y_position/1000;
-        this->_z_origin = this->_head_data.z_position/1000;
         this->_phi_origin = 360.0f - this->_head_data.z_rot_avg;
     } else {
         // round to milimeter accuracy
         this->_x_origin = round(this->_head_data.x_position)/1000;
         this->_y_origin = round(this->_head_data.y_position)/1000;
-        this->_z_origin = round(this->_head_data.z_position)/1000;
         // round to 0.1 degree
         this->_phi_origin = 360.0f - round(this->_head_data.z_rot_avg*10)/10;
     }
