@@ -267,9 +267,8 @@ void ofApp::toggleRecording(const void *sender, bool &value) {
 void ofApp::toggleSound(const void *sender, bool &value) {
     if (value == true) {
         // sound source position
-        ofVec2f pos = convertPolarToCartesian(this->_source_positions[this->_current_target]);
-        cout << "src pos:" << ofToString(pos.x) + "/" + ofToString(pos.y) << endl;
-        sendMessageToPhone(0, "SRCPOS/" + ofToString(pos.x) + "/" + ofToString(pos.y) + "/" + ofToString(this->_source_height));
+        ofVec2f pos = convertPolarToCartesian(this->_source_positions[this->_current_target], 90);
+        sendMessageToPhone(0, "SRCPOS/" + ofToString(-pos.x) + "/" + ofToString(pos.y) + "/" + ofToString(this->_source_height));
         // update ui
         this->_push_button_next.removeListener(this, &ofApp::moveToNextTarget);
         this->_push_button_previous.removeListener(this, &ofApp::moveToPreviousTarget);
