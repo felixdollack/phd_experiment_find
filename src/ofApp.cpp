@@ -148,7 +148,7 @@ void ofApp::update(){
     }
 
     if ((this->_old_head_x != this->_head_x) || (this->_old_head_y != this->_head_y) || (this->_old_head_z != this->_head_z) || (this->_old_head_phi != this->_head_phi)) {
-        sendMessageToPhone(0, "POSITION/" + ofToString(this->_head_x) + "/" + ofToString(this->_head_y) + "/" + ofToString(this->_head_z) + "/" + ofToString(this->_head_phi));
+        sendMessageToPhone(0, "POSITION/" + ofToString(-this->_head_x) + "/" + ofToString(-this->_head_y) + "/" + ofToString(this->_head_z) + "/" + ofToString(this->_head_phi));
     }
 }
 
