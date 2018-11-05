@@ -173,7 +173,7 @@ void ofApp::draw(){
         // draw head
         ofPushMatrix();
         {
-            ofVec2f pos = ofVec2f(this->_head_x, this->_head_y);
+            ofVec2f pos = ofVec2f(this->_head_x, -this->_head_y);
             pos = mapPositionToPixel(pos);
             ofTranslate(pos);
             ofSetColor(ofColor::orange);
