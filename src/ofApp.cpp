@@ -205,7 +205,7 @@ void ofApp::draw(){
     ofDrawBitmapString("connected to: " + this->_client_ip, 10, ofGetWindowHeight()-10);
 
     ofSetColor(ofColor::black);
-    ofDrawBitmapString("\\- window -/", this->_ui_center.x - 45, 15);
+    ofDrawBitmapString("\\- window -/", this->_ui_center.x - 45, ofGetWindowHeight()-15);
     ofDrawBitmapString("door", this->_ui_world_start.x, this->_ui_center.y);
 
     this->_uiPanel.draw();
