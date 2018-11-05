@@ -87,6 +87,7 @@ private:
     void connectPhone();
     void disconnectPhone();
     void sendMessageToPhone(int client, string message);
+    float _time;
 
     // data logging
     string nowToString();

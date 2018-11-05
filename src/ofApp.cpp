@@ -62,6 +62,7 @@ void ofApp::setup(){
     this->_old_head_y = 0;
     this->_old_head_z = 0;
     this->_old_head_phi = 0;
+    this->_time = 0.0f;
 
     // draw live feedback background
     ofSetCircleResolution(100);
@@ -101,6 +102,8 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
+    float now = ofGetElapsedTimef();
+    float dt = now - this->_time;
     if (this->_my_ip == "") {
         this->_my_ip = getIPhost();
     }
@@ -147,8 +150,11 @@ void ofApp::update(){
         this->_head_phi = fmod((360.0f - round(this->_head_data.z_rot_avg*10)/10) - this->_phi_origin, 360.0f);
     }
 
-    if ((this->_old_head_x != this->_head_x) || (this->_old_head_y != this->_head_y) || (this->_old_head_z != this->_head_z) || (this->_old_head_phi != this->_head_phi)) {
-        sendMessageToPhone(0, "POSITION/" + ofToString(-this->_head_x) + "/" + ofToString(-this->_head_y) + "/" + ofToString(this->_head_z) + "/" + ofToString(this->_head_phi));
+    if (dt > (1.0f/30.0f)) {
+        if ((this->_old_head_x != this->_head_x) || (this->_old_head_y != this->_head_y) || (this->_old_head_z != this->_head_z) || (this->_old_head_phi != this->_head_phi)) {
+            sendMessageToPhone(0, "POSITION/" + ofToString(-this->_head_x) + "/" + ofToString(-this->_head_y) + "/" + ofToString(this->_head_z) + "/" + ofToString(this->_head_phi));
+        }
+        this->_time = now;
     }
 }
 
