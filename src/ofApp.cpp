@@ -81,7 +81,9 @@ void ofApp::setup(){
         ofVec2f cartesian = convertPolarToCartesian(pos, 90); // rotate sources by 90 cw to have 0 at the bottom
         this->_source_instance[i].setPosition(cartesian);
     }
+    this->_sound_on = false;
     this->_current_target = 0;
+    this->_current_source_position = convertPolarToCartesian(this->_source_positions[this->_current_target], 90);
 
     // create and connect to shimmer udp port
     this->_eog_trigger = new UdpTrigger(this->_eog_host);
@@ -271,10 +273,11 @@ void ofApp::toggleRecording(const void *sender, bool &value) {
 }
 
 void ofApp::toggleSound(const void *sender, bool &value) {
+    this->_sound_on = value;
     if (value == true) {
         // sound source position
-        ofVec2f pos = convertPolarToCartesian(this->_source_positions[this->_current_target], 90);
-        sendMessageToPhone(0, "SRCPOS/" + ofToString(-pos.x) + "/" + ofToString(pos.y) + "/" + ofToString(this->_source_height));
+        this->_current_source_position = convertPolarToCartesian(this->_source_positions[this->_current_target], 90);
+        sendMessageToPhone(0, "SRCPOS/" + ofToString(-_current_source_position.x) + "/" + ofToString(_current_source_position.y) + "/" + ofToString(this->_source_height));
         // update ui
         this->_push_button_next.removeListener(this, &ofApp::moveToNextTarget);
         this->_push_button_previous.removeListener(this, &ofApp::moveToPreviousTarget);

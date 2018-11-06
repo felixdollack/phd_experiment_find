@@ -55,6 +55,8 @@ private:
     vector<ofVec2f> _source_positions;
     vector<Blinky> _source_instance;
     int _current_target;
+    ofVec2f _current_source_position;
+    bool _sound_on;
 
     // shimmer eog
     UdpTrigger *_eog_trigger;
