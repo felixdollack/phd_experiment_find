@@ -94,4 +94,5 @@ private:
     // data logging
     string nowToString();
     bool _isLogFileCreated;
+    float _logStartTime;
 };
