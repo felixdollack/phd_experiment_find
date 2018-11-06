@@ -157,6 +157,7 @@ void ofApp::update(){
             sendMessageToPhone(0, "POSITION/" + ofToString(-this->_head_x) + "/" + ofToString(-this->_head_y) + "/" + ofToString(this->_head_z) + "/" + ofToString(this->_head_phi));
         }
         this->_time = now;
+        ofLogNotice("UPDATE", "," + ofToString(now) + "," + ofToString(-this->_head_x) + "," + ofToString(-this->_head_y) + "," + ofToString(this->_head_z) + "," + ofToString(this->_head_phi) + "," + ofToString(this->_source_positions[this->_current_target].x) + "," + ofToString(this->_source_positions[this->_current_target].y) + "," + ofToString(-this->_current_source_position.x) + "," + ofToString(this->_current_source_position.y) + "," + ofToString(this->_source_height) + "," + ofToString(this->_sound_on));
     }
 }
 
@@ -262,6 +263,7 @@ void ofApp::toggleRecording(const void *sender, bool &value) {
             ofLogToFile(nowToString() + ".txt"); // set output filename
         }
         ofSetLogLevel(OF_LOG_NOTICE); // activate logging
+        ofLogNotice("RECORD", ",TIME,HEAD_X,HEAD_Y,HEAD_HEIGHT,HEAD_PHI,SOUND_R,SOUND_PHI,SOUND_X,SOUND_Y,SOUND_HEIGHT,SOUND_ON"); // write header
         this->_toggle_button_eog.setTextColor(ofColor::green);
         this->_eog_trigger->startRecording();
     } else {
