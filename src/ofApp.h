@@ -95,4 +95,5 @@ private:
     string nowToString();
     bool _isLogFileCreated;
     float _logStartTime;
+    string _username;
 };
