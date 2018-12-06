@@ -20,7 +20,7 @@ void ofApp::setup(){
     // add gui
     this->_uiPanel.setup();
     this->_uiPanel.add(this->_phone_label.setup("PHONE",""));
-    this->_uiPanel.add(this->_push_button_connect.setup("connect to phone"));
+    this->_uiPanel.add(this->_push_button_connect.setup("connect to tobii"));
     this->_uiPanel.add(this->_push_button_disconnect.setup("disconnect from phone"));
 
     this->_uiPanel.add(this->_tracking_label.setup("TRACKING",""));
@@ -100,6 +100,9 @@ void ofApp::setup(){
     this->_ssr_osc = new ofxOscSender();
     this->_ssr_osc->setup(this->_android_ip, this->_android_port);
 
+    this->_tobii_osc = new ofxOscSender();
+    this->_tobii_osc->setup(this->_tobii_ip, this->_tobii_port);
+
     // setup vicon receiver
     ofxUDPSettings settings;
     settings.receiveOn(this->_mocap_receive_port);
@@ -175,6 +178,89 @@ void ofApp::updateAngle(float phi) {
     }
 }
 
+void ofApp::setupProjectEyeTracker() {
+    ofxOscMessage msg = ofxOscMessage();
+    // set project
+    msg.setAddress("/set");
+    msg.addStringArg("project");
+    msg.addStringArg("eog_calibration");
+    _tobii_osc->sendMessage(msg);
+}
+
+void ofApp::setupSubjectEyeTracker() {
+    ofxOscMessage msg = ofxOscMessage();
+    // set participant
+    msg.setAddress("/set");
+    msg.addStringArg("participant");
+    msg.addStringArg(this->_username);
+    _tobii_osc->sendMessage(msg);
+}
+
+void ofApp::connectEyeTracker() {
+    ofxOscMessage msg = ofxOscMessage();
+    // connect
+    msg.setAddress("/connect");
+    msg.addStringArg("?");
+    msg.addIntArg(1);
+    _tobii_osc->sendMessage(msg);
+}
+
+void ofApp::streamEyeTracker() {
+    ofxOscMessage msg = ofxOscMessage();
+    // start streaming / wake up cameras
+    msg.setAddress("/stream");
+    msg.addStringArg("?");
+    msg.addIntArg(1);
+    _tobii_osc->sendMessage(msg);
+}
+
+void ofApp::stopRecordingEyeTracker() {
+    ofxOscMessage msg = ofxOscMessage();
+    // stop recording
+    msg.setAddress("/record");
+    msg.addStringArg("?");
+    msg.addIntArg(0);
+    _tobii_osc->sendMessage(msg);
+}
+
+void ofApp::cleanupEyeTracker() {
+    ofxOscMessage msg = ofxOscMessage();
+    // stop streaming
+    msg.setAddress("/stream");
+    msg.addStringArg("?");
+    msg.addIntArg(0);
+    _tobii_osc->sendMessage(msg);
+
+    // disconnect
+    msg.setAddress("/connect");
+    msg.addStringArg("?");
+    msg.addIntArg(0);
+    _tobii_osc->sendMessage(msg);
+}
+
+void ofApp::calibrateEyeTracker() {
+    ofxOscMessage msg = ofxOscMessage();
+    msg.setAddress("/set");
+    msg.addStringArg("calibration");
+    msg.addStringArg("?");
+    _tobii_osc->sendMessage(msg);
+}
+
+void ofApp::recordEyeTracker() {
+    ofxOscMessage msg = ofxOscMessage();
+    msg.setAddress("/record");
+    msg.addStringArg("?");
+    msg.addIntArg(1);
+    _tobii_osc->sendMessage(msg);
+}
+
+void ofApp::sendEyeTrackerEvent(string message) {
+    ofxOscMessage msg = ofxOscMessage();
+    msg.setAddress("/set");
+    msg.addStringArg("trigger");
+    msg.addStringArg(message);
+    _tobii_osc->sendMessage(msg);
+}
 //--------------------------------------------------------------
 void ofApp::update(){
     float now = ofGetElapsedTimef();
@@ -331,6 +417,15 @@ void ofApp::keyPressed(int key){
     if (key == '7') {
         connectToSSR(false);
     }
+
+    if (key == 's') {
+        setupProjectEyeTracker();
+        setupSubjectEyeTracker();
+        streamEyeTracker();
+    }
+    if (key == 'c') {
+        calibrateEyeTracker();
+    }
 }
 
 //--------------------------------------------------------------
@@ -366,6 +461,7 @@ void ofApp::moveToPreviousTarget() {
 
 void ofApp::toggleRecording(const void *sender, bool &value) {
     if (value == true) {
+        recordEyeTracker(); // this needs some time, so I do it first
         if (this->_isLogFileCreated == false) {
             this->_isLogFileCreated = true;
             ofLogToFile(this->_username + "_" + nowToString() + ".txt"); // set output filename
@@ -376,6 +472,7 @@ void ofApp::toggleRecording(const void *sender, bool &value) {
         this->_toggle_button_eog.setTextColor(ofColor::green);
         this->_eog_trigger->startRecording();
     } else {
+        stopRecordingEyeTracker();
         this->_eog_trigger->stopRecording();
         this->_toggle_button_eog.setTextColor(ofColor::red);
         ofSetLogLevel(OF_LOG_SILENT); // deactivate logging
@@ -400,8 +497,11 @@ void ofApp::toggleSound(const void *sender, bool &value) {
         // send sound and eog-trigger message
         sendMessageToPhone(0, "PLAY/");
         this->_eog_trigger->sendTrigger("sound_on");
+        sendEyeTrackerEvent("sound_on");
     } else {
-        sendMessageToPhone(0, "STOP/");
+        sendEyeTrackerEvent("sound_off");
+        //sendMessageToPhone(0, "STOP/");
+        streamSSR(false);
         this->_eog_trigger->sendTrigger("sound_off");
         this->_toggle_button_sound.setTextColor(ofColor::red);
         this->_push_button_next.setTextColor(ofColor::white);
@@ -480,21 +580,23 @@ void ofApp::sendMessageToPhone(int client, string message) {
     }*/
 }
 
-/*void ofApp::connectPhone() {
-    if (this->_android_tcp_server->getNumClients() <= 0) {
+void ofApp::connectPhone() {
+    connectEyeTracker();
+    /*if (this->_android_tcp_server->getNumClients() <= 0) {
         bool success = this->_android_tcp_server->setup(this->_android_port);
-        if (success == true) {
+        if (success == true) {*/
             this->_push_button_connect.removeListener(this, &ofApp::connectPhone);
-            this->_push_button_disconnect.addListener(this, &ofApp::disconnectPhone);
             this->_push_button_connect.setFillColor(ofColor::black);
+            /*this->_push_button_disconnect.addListener(this, &ofApp::disconnectPhone);
             this->_push_button_disconnect.setFillColor(ofColor::gray);
             this->_push_button_disconnect.setTextColor(ofColor::white);
         }
-    }
-}*/
+    }*/
+}
 
 void ofApp::disconnectPhone() {
     connectToSSR(false);
+    cleanupEyeTracker();
     /*if (this->_android_tcp_server->isConnected()) {
         for (int clientID = 0; clientID < this->_android_tcp_server->getNumClients(); clientID++) {
             sendMessageToPhone(clientID, "END/");
@@ -528,6 +630,12 @@ void ofApp::loadSettingsAndWriteDefaultIfNeeded() {
         this->_source_radius = this->_settings->getValue("ui_radius", 1.0f);
         this->_settings->pushTag("network");
         {
+            this->_settings->pushTag("tobii");
+            {
+                this->_tobii_port = this->_settings->getValue("port", 8000);
+                this->_tobii_ip = this->_settings->getValue("ip", "192.168.1.1");
+            }
+            this->_settings->popTag();
             this->_settings->pushTag("android");
             {
                 this->_android_ip = this->_settings->getValue("ip", "192.168.1.1");
@@ -599,6 +707,13 @@ void ofApp::writeDefaultSettings() {
         this->_settings->addTag("network");
         this->_settings->pushTag("network");
         {
+            this->_settings->addTag("tobii");
+            this->_settings->pushTag("tobii");
+            {
+                this->_settings->addValue("port", 8000);
+                this->_settings->addValue("ip", "192.168.1.1");
+            }
+            this->_settings->popTag();
             this->_settings->addTag("android");
             this->_settings->pushTag("android");
             {
