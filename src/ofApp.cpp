@@ -74,6 +74,7 @@ void ofApp::setup(){
     this->_ui_max_distance = (this->_ui_world_diameter/2)*0.90;
 
     loadSettingsAndWriteDefaultIfNeeded();
+    loadPositions();
 
     // create sound positions to be tested
     for (int i=0; i < this->_source_positions.size(); i++) {
@@ -412,25 +413,12 @@ void ofApp::loadSettingsAndWriteDefaultIfNeeded() {
         this->_settings->pushTag("subject");
         {
             this->_username = this->_settings->getValue("name", "USER");
+            this->_position_settings_filename = this->_username + ".xml";
             this->_source_height = this->_settings->getValue("ear_height", 1.60f);
             this->_ui_head_radius = this->_settings->getValue("ui_radius", 2.0f);
         }
         this->_settings->popTag();
         this->_source_radius = this->_settings->getValue("ui_radius", 1.0f);
-        int number_of_positions = this->_settings->getValue("number_of_positions", 0);
-        this->_settings->pushTag("positions");
-        {
-            for (int i=0; i < number_of_positions; i++) {
-                this->_settings->pushTag("position", i);
-                {
-                    float phi = this->_settings->getValue("phi", 0);  // 0 - 359.9 degrees
-                    float r   = this->_settings->getValue("r", 0.0f); // 0.5 - 3.5 meters
-                    this->_source_positions.push_back(ofVec2f(r, phi));
-                }
-                this->_settings->popTag();
-            }
-        }
-        this->_settings->popTag();
         this->_settings->pushTag("network");
         {
             this->_settings->pushTag("android");
@@ -461,6 +449,32 @@ void ofApp::loadSettingsAndWriteDefaultIfNeeded() {
     this->_settings->popTag();
 }
 
+void ofApp::loadPositions() {
+    this->_position_settings = new ofxXmlSettings();
+    if (this->_position_settings->loadFile(this->_position_settings_filename) == false) {
+        writeDefaultPositionSettings();
+        this->_position_settings->loadFile(this->_position_settings_filename);
+    }
+    this->_position_settings->pushTag("position_settings");
+    {
+        int number_of_positions = this->_position_settings->getValue("number_of_positions", 0);
+        this->_position_settings->pushTag("positions");
+        {
+            for (int i=0; i < number_of_positions; i++) {
+                this->_position_settings->pushTag("position", i);
+                {
+                    float phi = this->_position_settings->getValue("phi", 0);  // 0 - 359.9 degrees
+                    float r   = this->_position_settings->getValue("r", 0.0f); // 0.5 - 3.5 meters
+                    this->_source_positions.push_back(ofVec2f(r, phi));
+                }
+                this->_position_settings->popTag();
+            }
+        }
+        this->_position_settings->popTag();
+    }
+    this->_position_settings->popTag();
+}
+
 void ofApp::writeDefaultSettings() {
     this->_settings->addTag("settings");
     this->_settings->pushTag("settings");
@@ -468,25 +482,12 @@ void ofApp::writeDefaultSettings() {
         this->_settings->addTag("subject");
         this->_settings->pushTag("subject");
         {
-            this->_settings->addValue("name", "USER");
+            this->_settings->addValue("name", "xx00xx00");
             this->_settings->addValue("ear_height", 1.60f);
             this->_settings->addValue("ui_radius", 15.0f);
         }
         this->_settings->popTag();
         this->_settings->addValue("ui_radius", 10.0f);
-        this->_settings->addValue("number_of_positions", 1);
-        this->_settings->addTag("positions");
-        this->_settings->pushTag("positions");
-        {
-            this->_settings->addTag("position");
-            this->_settings->pushTag("position");
-            {
-                this->_settings->addValue("phi", 0);
-                this->_settings->addValue("r", 0.5f);
-            }
-            this->_settings->popTag();
-        }
-        this->_settings->popTag();
         this->_settings->addTag("network");
         this->_settings->pushTag("network");
         {
@@ -521,6 +522,28 @@ void ofApp::writeDefaultSettings() {
     }
     this->_settings->popTag();
     this->_settings->saveFile();
+}
+
+void ofApp::writeDefaultPositionSettings() {
+    this->_position_settings->addTag("position_settings");
+    this->_position_settings->pushTag("position_settings");
+    {
+        this->_position_settings->addValue("number_of_positions", 1);
+        this->_position_settings->addTag("positions");
+        this->_position_settings->pushTag("positions");
+        {
+            this->_position_settings->addTag("position");
+            this->_position_settings->pushTag("position");
+            {
+                this->_position_settings->addValue("phi", 0);
+                this->_position_settings->addValue("r", 0.5f);
+            }
+            this->_position_settings->popTag();
+        }
+        this->_position_settings->popTag();
+    }
+    this->_position_settings->popTag();
+    this->_position_settings->saveFile();
 }
 
 string ofApp::nowToString() {

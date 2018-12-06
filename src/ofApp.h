@@ -22,10 +22,13 @@ class ofApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);
 		
 private:
-    ofxXmlSettings *_settings;
+    ofxXmlSettings *_settings, *_position_settings;
     const string _settings_filename = "settings.xml";
+    string _position_settings_filename;
     void loadSettingsAndWriteDefaultIfNeeded();
+    void loadPositions();
     void writeDefaultSettings();
+    void writeDefaultPositionSettings();
 
     // ui settings
     float _line_width = 6.0f;
