@@ -3,9 +3,9 @@
 void ofApp::exit(){
     this->_eog_trigger->stopRecording();
     disconnectPhone();
-    if (this->_android_tcp_server->isConnected()) {
+    /*if (this->_android_tcp_server->isConnected()) {
         this->_android_tcp_server->close();
-    }
+    }*/
     this->_vicon_receiver.stop();
 }
 
@@ -40,7 +40,7 @@ void ofApp::setup(){
     this->_toggle_button_sound.setTextColor(ofColor::red);
 
     // add gui listeners
-    this->_push_button_connect.addListener(this, &ofApp::connectPhone);
+    //this->_push_button_connect.addListener(this, &ofApp::connectPhone);
     this->_reset_head_origin.addListener(this, &ofApp::resetHeadOrigin);
     this->_toggle_button_eog.addListener(this, &ofApp::toggleRecording);
     this->_toggle_button_sound.addListener(this, &ofApp::toggleSound);
@@ -92,16 +92,87 @@ void ofApp::setup(){
     this->_eog_trigger->connectToHost();
 
     // create tcp server to connect to android
-    if (this->_android_tcp_server == NULL) {
+    /*if (this->_android_tcp_server == NULL) {
+        this->_incoming_message_len = 0;
         this->_android_tcp_server = new ofxTCPServer();
         this->_android_tcp_server->setMessageDelimiter("");
-    }
+    }*/
+    this->_ssr_osc = new ofxOscSender();
+    this->_ssr_osc->setup("localhost", this->_android_port);
 
     // setup vicon receiver
     ofxUDPSettings settings;
     settings.receiveOn(this->_mocap_receive_port);
     settings.blocking = false;
     this->_vicon_receiver.setup(settings);
+}
+
+void ofApp::connectToSSR(bool value) {
+    if (this->_ssr_osc != NULL) {
+        ofxOscMessage msg = ofxOscMessage();
+        msg.setAddress("/connect");
+        msg.addStringArg("?");
+        if (value == true) {
+            msg.addIntArg(1);
+        } else {
+            msg.addIntArg(0);
+        }
+        this->_ssr_osc->sendMessage(msg);
+    }
+}
+void ofApp::loadSsrScene() {
+    if (this->_ssr_osc != NULL) {
+        ofxOscMessage msg = ofxOscMessage();
+        msg.setAddress("/load");
+        msg.addStringArg("?");
+        msg.addStringArg("?");
+        this->_ssr_osc->sendMessage(msg);
+    }
+}
+void ofApp::streamSSR(bool value) {
+    if (this->_ssr_osc != NULL) {
+        ofxOscMessage msg = ofxOscMessage();
+        msg.setAddress("/stream");
+        msg.addStringArg("?");
+        if (value == true) {
+            msg.addIntArg(1);
+        } else {
+            msg.addIntArg(0);
+        }
+        this->_ssr_osc->sendMessage(msg);
+        if (value == true) {
+            this->_ssr_running = true;
+        } else {
+            this->_ssr_running = false;
+        }
+    }
+}
+void ofApp::updateSoundPos(float x, float y) {
+    if (this->_ssr_osc != NULL) {
+        ofxOscMessage msg = ofxOscMessage();
+        msg.setAddress("/soundpos");
+        msg.addFloatArg(x);
+        msg.addFloatArg(y);
+        this->_ssr_osc->sendMessage(msg);
+    }
+}
+void ofApp::updatePos(float x, float y) {
+    if (this->_ssr_osc != NULL) {
+        ofxOscMessage msg = ofxOscMessage();
+        msg.setAddress("/pos");
+        msg.addFloatArg(x);
+        msg.addFloatArg(y);
+        this->_ssr_osc->sendMessage(msg);
+    }
+}
+void ofApp::updateAngle(float phi) {
+    if (this->_ssr_osc != NULL) {
+        ofxOscMessage msg = ofxOscMessage();
+        msg.setAddress("/azimuth");
+        msg.addStringArg("?");
+        msg.addFloatArg(phi);
+        this->_ssr_osc->sendMessage(msg);
+    }
 }
 
 //--------------------------------------------------------------
@@ -111,14 +182,14 @@ void ofApp::update(){
     if (this->_my_ip == "") {
         this->_my_ip = getIPhost();
     }
-    if (this->_client_ip == "000.000.000.000") {
+    /*if (this->_client_ip == "000.000.000.000") {
         if (this->_android_tcp_server->getNumClients() > 0) {
             this->_client_ip = this->_android_tcp_server->getClientIP(0);
             this->_push_button_connect.setTextColor(ofColor::green);
         } else {
             this->_push_button_connect.setTextColor(ofColor::red);
         }
-    }
+    }*/
     for (int i=0; i < this->_source_positions.size(); i++) {
         if (i == this->_current_target) {
             if (!this->_source_instance[i].isBlinking()) {
@@ -154,13 +225,27 @@ void ofApp::update(){
         this->_head_phi = fmod((360.0f - round(this->_head_data.z_rot_avg*10)/10) - this->_phi_origin, 360.0f);
     }
 
-    if (dt > (1.0f/30.0f)) {
+    //if (dt > (1.0f/30.0f)) {
         if ((this->_old_head_x != this->_head_x) || (this->_old_head_y != this->_head_y) || (this->_old_head_z != this->_head_z) || (this->_old_head_phi != this->_head_phi)) {
-            sendMessageToPhone(0, "POSITION/" + ofToString(-this->_head_x) + "/" + ofToString(-this->_head_y) + "/" + ofToString(this->_head_z) + "/" + ofToString(this->_head_phi));
+            if (this->_ssr_running == true) {
+                updatePos(-this->_head_y, this->_head_x);
+                updateAngle(fmod((270 + round(this->_head_data.z_rot_avg*10)/10) - this->_phi_origin, 360.0f));
+            }
+            //sendMessageToPhone(0, "POSITION/" + ofToString(-this->_head_x) + "/" + ofToString(-this->_head_y) + "/" + ofToString(this->_head_z) + "/" + ofToString(this->_head_phi));
         }
         this->_time = now;
         ofLogNotice("UPDATE", "," + ofToString(now-this->_logStartTime) + "," + ofToString(-this->_head_x) + "," + ofToString(-this->_head_y) + "," + ofToString(this->_head_z) + "," + ofToString(this->_head_phi) + "," + ofToString(this->_source_positions[this->_current_target].x) + "," + ofToString(this->_source_positions[this->_current_target].y) + "," + ofToString(-this->_current_source_position.x) + "," + ofToString(this->_current_source_position.y) + "," + ofToString(this->_source_height) + "," + ofToString(this->_sound_on));
-    }
+    //}
+    /*this->_incoming_message_len = this->_android_tcp_server->getNumReceivedBytes(0);
+    if (this->_incoming_message_len >= 4) {
+        char *_inchar = new char[this->_incoming_message_len];
+        this->_android_tcp_server->receiveRawBytes(0, _inchar, this->_incoming_message_len);
+    TODO:        int bytes_to_read = (_inchar[0] << 24) + (_inchar[1] << 16) + (_inchar[2] << 8) + _inchar[3];
+        _inchar = new char[bytes_to_read];
+        this->_android_tcp_server->receiveRawBytes(0, _inchar, bytes_to_read);
+        string s = _inchar;
+        cout << s << endl;
+    }*/
 }
 
 //--------------------------------------------------------------
@@ -184,7 +269,8 @@ void ofApp::draw(){
         // draw head
         ofPushMatrix();
         {
-            ofVec2f pos = ofVec2f(this->_head_x, -this->_head_y);
+            //ofVec2f pos = ofVec2f(this->_head_x, -this->_head_y);
+            ofVec2f pos = ofVec2f(this->_head_y, this->_head_x);
             pos = mapPositionToPixel(pos);
             ofTranslate(pos);
             ofSetColor(ofColor::orange);
@@ -224,7 +310,27 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
+    if (key == '1') {
+        connectToSSR(true);
+    }
+    if (key == '2') {
+        loadSsrScene();
+    }
+    if (key == '3') {
+        streamSSR(true);
+    }
+    if (key == '4') {
+        updateSoundPos(this->_head_x, this->_head_y);
+    }
+    if (key == '5') {
+        updatePos(this->_head_x, this->_head_y);
+    }
+    if (key == '6') {
+        streamSSR(false);
+    }
+    if (key == '7') {
+        connectToSSR(false);
+    }
 }
 
 //--------------------------------------------------------------
@@ -364,17 +470,17 @@ ofVec2f ofApp::mapPositionToPixel(ofVec2f pos) {
 }
 
 void ofApp::sendMessageToPhone(int client, string message) {
-    if (this->_android_tcp_server->isClientConnected(client) == true) {
+    /*if (this->_android_tcp_server->isClientConnected(client) == true) {
         char messageLength[4];
         for (int i = 0; i < 4; i++) {
             messageLength[3 - i] = (message.length() >> (i * 8));
         }
         this->_android_tcp_server->sendRawBytes(client, messageLength, 4);
         this->_android_tcp_server->sendRawBytes(client, message.c_str(), message.length());
-    }
+    }*/
 }
 
-void ofApp::connectPhone() {
+/*void ofApp::connectPhone() {
     if (this->_android_tcp_server->getNumClients() <= 0) {
         bool success = this->_android_tcp_server->setup(this->_android_port);
         if (success == true) {
@@ -385,10 +491,11 @@ void ofApp::connectPhone() {
             this->_push_button_disconnect.setTextColor(ofColor::white);
         }
     }
-}
+}*/
 
 void ofApp::disconnectPhone() {
-    if (this->_android_tcp_server->isConnected()) {
+    connectToSSR(false);
+    /*if (this->_android_tcp_server->isConnected()) {
         for (int clientID = 0; clientID < this->_android_tcp_server->getNumClients(); clientID++) {
             sendMessageToPhone(clientID, "END/");
             this->_android_tcp_server->disconnectClient(clientID);
@@ -399,7 +506,7 @@ void ofApp::disconnectPhone() {
         this->_push_button_connect.setFillColor(ofColor::gray);
         this->_push_button_disconnect.setFillColor(ofColor::black);
         this->_push_button_disconnect.setTextColor(ofColor::black);
-    }
+    }*/
 }
 
 void ofApp::loadSettingsAndWriteDefaultIfNeeded() {

@@ -7,6 +7,7 @@
 #include "ofxGui.h"
 #include "vicon_receiver.h"
 #include <ctime>
+#include "ofxOsc.h"
 
 class ofApp : public ofBaseApp{
 
@@ -86,13 +87,22 @@ private:
     string _my_ip = "";
     string getIPhost();
     vector<string> getLocalIPs();
-    ofxTCPServer* _android_tcp_server;
+    //ofxTCPServer* _android_tcp_server;
     int _android_port;
     string _client_ip;
-    void connectPhone();
+    //void connectPhone();
     void disconnectPhone();
     void sendMessageToPhone(int client, string message);
     float _time;
+    //int _incoming_message_len;
+    ofxOscSender *_ssr_osc;
+    void connectToSSR(bool value);
+    void loadSsrScene();
+    void streamSSR(bool value);
+    void updateSoundPos(float x, float y);
+    void updatePos(float x, float y);
+    void updateAngle(float phi);
+    bool _ssr_running;
 
     // data logging
     string nowToString();
