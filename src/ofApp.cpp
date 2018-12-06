@@ -98,7 +98,7 @@ void ofApp::setup(){
         this->_android_tcp_server->setMessageDelimiter("");
     }*/
     this->_ssr_osc = new ofxOscSender();
-    this->_ssr_osc->setup("localhost", this->_android_port);
+    this->_ssr_osc->setup(this->_android_ip, this->_android_port);
 
     // setup vicon receiver
     ofxUDPSettings settings;
@@ -530,6 +530,7 @@ void ofApp::loadSettingsAndWriteDefaultIfNeeded() {
         {
             this->_settings->pushTag("android");
             {
+                this->_android_ip = this->_settings->getValue("ip", "192.168.1.1");
                 this->_android_port = this->_settings->getValue("port", -1);
             }
             this->_settings->popTag();
