@@ -488,7 +488,8 @@ void ofApp::toggleSound(const void *sender, bool &value) {
     if (value == true) {
         // sound source position
         this->_current_source_position = convertPolarToCartesian(this->_source_positions[this->_current_target], 90);
-        sendMessageToPhone(0, "SRCPOS/" + ofToString(-_current_source_position.x) + "/" + ofToString(_current_source_position.y) + "/" + ofToString(this->_source_height));
+        //sendMessageToPhone(0, "SRCPOS/" + ofToString(-_current_source_position.x) + "/" + ofToString(_current_source_position.y) + "/" + ofToString(this->_source_height));
+        updateSoundPos(-_current_source_position.x, _current_source_position.y);
         // update ui
         this->_push_button_next.removeListener(this, &ofApp::moveToNextTarget);
         this->_push_button_previous.removeListener(this, &ofApp::moveToPreviousTarget);
@@ -498,7 +499,8 @@ void ofApp::toggleSound(const void *sender, bool &value) {
         this->_push_button_previous.setTextColor(ofColor::black);
         this->_toggle_button_sound.setTextColor(ofColor::green);
         // send sound and eog-trigger message
-        sendMessageToPhone(0, "PLAY/");
+        streamSSR(true);
+        //sendMessageToPhone(0, "PLAY/");
         this->_eog_trigger->sendTrigger("sound_on");
         sendEyeTrackerEvent("sound_on");
     } else {
@@ -513,6 +515,7 @@ void ofApp::toggleSound(const void *sender, bool &value) {
         this->_push_button_previous.setFillColor(ofColor(128));
         this->_push_button_next.addListener(this, &ofApp::moveToNextTarget);
         this->_push_button_previous.addListener(this, &ofApp::moveToPreviousTarget);
+        //loadSsrScene(); // reset scene to be able to continue
     }
 }
 
