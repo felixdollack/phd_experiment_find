@@ -314,8 +314,11 @@ void ofApp::update(){
     //if (dt > (1.0f/30.0f)) {
         if ((this->_old_head_x != this->_head_x) || (this->_old_head_y != this->_head_y) || (this->_old_head_z != this->_head_z) || (this->_old_head_phi != this->_head_phi)) {
             if (this->_ssr_running == true) {
-                updatePos(-this->_head_y, this->_head_x);
-                updateAngle(fmod((270 + round(this->_head_data.z_rot_avg*10)/10) - this->_phi_origin, 360.0f));
+                //updatePos(-this->_head_y, this->_head_x);
+                updatePos(-this->_head_x, -this->_head_y);
+                //updateAngle(fmod((270 + round(this->_head_data.z_rot_avg*10)/10) - this->_phi_origin, 360.0f));
+                updateAngle(fmod(90 - this->_head_phi, 360.0f));
+                //updateAngle(this->_head_phi);
             }
             //sendMessageToPhone(0, "POSITION/" + ofToString(-this->_head_x) + "/" + ofToString(-this->_head_y) + "/" + ofToString(this->_head_z) + "/" + ofToString(this->_head_phi));
         }
@@ -355,8 +358,8 @@ void ofApp::draw(){
         // draw head
         ofPushMatrix();
         {
-            //ofVec2f pos = ofVec2f(this->_head_x, -this->_head_y);
-            ofVec2f pos = ofVec2f(this->_head_y, this->_head_x);
+            ofVec2f pos = ofVec2f(this->_head_x, -this->_head_y);
+            //ofVec2f pos = ofVec2f(this->_head_y, this->_head_x);
             pos = mapPositionToPixel(pos);
             ofTranslate(pos);
             ofSetColor(ofColor::orange);
