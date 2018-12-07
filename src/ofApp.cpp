@@ -40,7 +40,7 @@ void ofApp::setup(){
     this->_toggle_button_sound.setTextColor(ofColor::red);
 
     // add gui listeners
-    //this->_push_button_connect.addListener(this, &ofApp::connectPhone);
+    this->_push_button_connect.addListener(this, &ofApp::connectPhone);
     this->_reset_head_origin.addListener(this, &ofApp::resetHeadOrigin);
     this->_toggle_button_eog.addListener(this, &ofApp::toggleRecording);
     this->_toggle_button_sound.addListener(this, &ofApp::toggleSound);

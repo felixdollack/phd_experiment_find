@@ -105,7 +105,7 @@ private:
     int _android_port;
     string _android_ip;
     string _client_ip;
-    //void connectPhone();
+    void connectPhone();
     void disconnectPhone();
     void sendMessageToPhone(int client, string message);
     float _time;
