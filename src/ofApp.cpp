@@ -225,12 +225,6 @@ void ofApp::stopRecordingEyeTracker() {
 
 void ofApp::cleanupEyeTracker() {
     ofxOscMessage msg = ofxOscMessage();
-    // stop streaming
-    msg.setAddress("/stream");
-    msg.addStringArg("?");
-    msg.addIntArg(0);
-    _tobii_osc->sendMessage(msg);
-
     // disconnect
     msg.setAddress("/connect");
     msg.addStringArg("?");
