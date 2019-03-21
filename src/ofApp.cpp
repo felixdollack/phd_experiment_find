@@ -317,7 +317,7 @@ void ofApp::update(){
             //sendMessageToPhone(0, "POSITION/" + ofToString(-this->_head_x) + "/" + ofToString(-this->_head_y) + "/" + ofToString(this->_head_z) + "/" + ofToString(this->_head_phi));
         }
         this->_time = now;
-        ofLogNotice("UPDATE", "," + ofToString(now-this->_logStartTime) + "," + ofToString(-this->_head_x) + "," + ofToString(-this->_head_y) + "," + ofToString(this->_head_z) + "," + ofToString(this->_head_phi) + "," + ofToString(this->_source_positions[this->_current_target].x) + "," + ofToString(this->_source_positions[this->_current_target].y) + "," + ofToString(-this->_current_source_position.x) + "," + ofToString(this->_current_source_position.y) + "," + ofToString(this->_source_height) + "," + ofToString(this->_sound_on));
+        ofLogNotice("UPDATE", "," + ofToString(now-this->_logStartTime) + "," + ofToString(this->_phi_origin) + "," + ofToString(-this->_head_x) + "," + ofToString(-this->_head_y) + "," + ofToString(this->_head_z) + "," + ofToString(this->_head_phi) + "," + ofToString(this->_source_positions[this->_current_target].x) + "," + ofToString(this->_source_positions[this->_current_target].y) + "," + ofToString(-this->_current_source_position.x) + "," + ofToString(this->_current_source_position.y) + "," + ofToString(this->_source_height) + "," + ofToString(this->_sound_on));
     //}
     /*this->_incoming_message_len = this->_android_tcp_server->getNumReceivedBytes(0);
     if (this->_incoming_message_len >= 4) {
