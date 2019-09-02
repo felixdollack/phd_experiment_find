@@ -1,0 +1,38 @@
+<position_settings>
+    <number_of_positions>8</number_of_positions>
+    <positions>
+        <position>
+            <phi>45</phi>
+            <r>1.000000000</r>
+        </position>
+        <position>
+            <phi>135</phi>
+            <r>1.750000000</r>
+        </position>
+        <position>
+            <phi>225</phi>
+            <r>1.000000000</r>
+        </position>
+        <position>
+            <phi>315</phi>
+            <r>1.750000000</r>
+        </position>
+        <position>
+            <phi>0</phi>
+            <r>1.500000000</r>
+        </position>
+        <position>
+            <phi>90</phi>
+            <r>2.000000000</r>
+        </position>
+        <position>
+            <phi>180</phi>
+            <r>1.500000000</r>
+        </position>
+        <position>
+            <phi>270</phi>
+            <r>2.000000000</r>
+        </position>
+
+    </positions>
+</position_settings>

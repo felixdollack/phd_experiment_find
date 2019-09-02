@@ -1,0 +1,29 @@
+<settings>
+    <subject>
+        <name>dummy</name>
+        <ear_height>1.600000000</ear_height>
+        <ui_radius>15.000000000</ui_radius>
+    </subject>
+    <ui_radius>10.000000000</ui_radius>
+    <network>
+        <tobii>
+            <port>8000</port>
+            <ip>192.168.12.31</ip>
+        </tobii>
+        <android>
+            <ip>0.0.0.0</ip>
+            <port>9000</port>
+        </android>
+        <eog>
+            <host>192.168.12.31</host>
+        </eog>
+        <mocap>
+            <use_vicon>1</use_vicon>
+            <host>192.168.1.1</host>
+            <port>
+                <in>18403</in>
+                <out>18404</out>
+            </port>
+        </mocap>
+    </network>
+</settings>
