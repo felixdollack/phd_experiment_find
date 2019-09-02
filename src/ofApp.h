@@ -112,7 +112,7 @@ private:
     //int _incoming_message_len;
     ofxOscSender *_ssr_osc;
     void connectToSSR(bool value);
-    void loadSsrScene();
+    void loadSsrScene(string filename);
     void streamSSR(bool value);
     void updateSoundPos(float x, float y);
     void updatePos(float x, float y);

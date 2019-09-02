@@ -123,12 +123,12 @@ void ofApp::connectToSSR(bool value) {
         this->_ssr_osc->sendMessage(msg);
     }
 }
-void ofApp::loadSsrScene() {
+void ofApp::loadSsrScene(string filename) {
     if (this->_ssr_osc != NULL) {
         ofxOscMessage msg = ofxOscMessage();
         msg.setAddress("/load");
         msg.addStringArg("?");
-        msg.addStringArg("?");
+        msg.addStringArg(filename);
         this->_ssr_osc->sendMessage(msg);
     }
 }
@@ -397,7 +397,7 @@ void ofApp::keyPressed(int key){
         connectToSSR(true);
     }
     if (key == '2') {
-        loadSsrScene();
+        loadSsrScene("ssr_scene_localization");
     }
     if (key == '3') {
         streamSSR(true);
